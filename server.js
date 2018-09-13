@@ -10,7 +10,7 @@ const bodyParser = require('body-parser');
 mongoose.connect(configDatabase.database);
 let db = mongoose.connection;
 let port = 3000;
-
+app.use(express.static(__dirname + '/src/busRoutes'));
 app.use(express.static(__dirname + '/assets'));
 // Check connection
 db.once('open', () =>{
