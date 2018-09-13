@@ -1,4 +1,4 @@
-3D Busses is a project wich interacts with the WRLD api in order to represent busses in real time in a 3D enviorment.
+3D Buses is a project which interacts with the WRLD api in order to represent buses in real time in a 3D enviorment.
 
 
 To run the project you will need to have:

@@ -1,7 +1,7 @@
 <html>
 <head>
 <script src="https://cdn-webgl.wrld3d.com/wrldjs/dist/latest/wrld.js"></script>
-<script src="testRoute.js"></script>
+<script src="busRoutes.js"></script>
 <script src="busStopList.js"></script>
 <link href="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.0.1/leaflet.css" rel="stylesheet" />
 <link rel="stylesheet" href="testcss.css">
@@ -13,9 +13,9 @@
 		<div id="map" style="height: 100%"></div>		
 			<script>
 			
+			//create map 
 			var map = L.Wrld.map("map", "c976700dbe05df6d18bdab38af2b1ae2", {center: [56.458522, -2.97107], zoom: 15});
-				
-				
+						
 			// create custom icon
     		var BusStop = L.Icon.extend({
     		options: {
@@ -25,6 +25,7 @@
     			}
 			});
 
+			//links to images used for stops
 			var linkBusStop = 'https://cdn3.iconfinder.com/data/icons/transport-29/100/22-512.png'
 			var linkBusStation = 'https://cdn2.iconfinder.com/data/icons/large-home-icons/512/Bus_station_transportation_space.png'
 
@@ -85,6 +86,7 @@
         			}
 			});
 			
+			//CSS for the routes
 			var BusRouteOptions =
 			{
 			'color': 'blue',
@@ -93,6 +95,7 @@
 			'smoothFactor': '1'
 			}
 			
+			//creates each route
 			var numberFiveBus = L.polyline(numberFiveBusRoute, BusRouteOptions).addTo(map);
 			var numberOneBus = L.polyline(numberOneBusRoute, BusRouteOptions).addTo(map);
 			
