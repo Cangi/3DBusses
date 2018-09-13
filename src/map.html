@@ -3,16 +3,33 @@
   <head>
     <script src="https://cdn-webgl.wrld3d.com/wrldjs/dist/latest/wrld.js"></script>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.0.1/leaflet.css" rel="stylesheet" />
+    
+    <link href="https://cdn-webgl.wrld3d.com/wrldjs/addons/resources/latest/css/wrld.css" rel="stylesheet"/>
+    <script src="https://code.jquery.com/jquery-1.12.4.min.js"></script>
+    <script src="./Leaflet.ImageOverlay.Rotate.js"></script>
+    <script src="https://cdn-webgl.wrld3d.com/wrldjs/addons/marker_controller/latest/marker_controller.js"></script>
   </head>
   
   <body>
   <div style="position: relative">
     <div id="map" style="height: 400px"></div>
     <script>
+      var imageUrl = 'test.png',
+    imageBounds = L.latLngBounds([[56.45487, -2.96654], [56.45553, -2.97011], [56.45454, -2.96933]]);
       var map = L.Wrld.map("map", "77e6434b40e627a85d9b43432da1f95a", {
-        center: [37.7858, -122.401],
+        center: [56.45835, -2.974138],
         zoom: 16
       });
+      map.on("click", function(e) {
+        pixelPosition = e.layerPoint;
+        latLng = map.layerPointToLatLng(pixelPosition);
+        alert("Pixel position = "+pixelPosition + "\nLatLng = "+latLng);
+      });
+      var image = L.imageOverlay.rotated(imageUrl, imageBounds, { opacity: 1, interactive: true }).addTo(map);
+      L.marker([56.45487, -2.96654], { title: "first" }).addTo(map);
+      L.marker([56.45553, -2.97011], { title: "second" }).addTo(map);
+      /*var transformedImage = L.imageTransform('test.jpg', imageBounds);
+      transformedImage.addTo(map);*/
     </script>
 
   </div>
