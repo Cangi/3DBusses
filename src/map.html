@@ -97,33 +97,8 @@
             		map.addLayer(stationMarkers);
         			}
 			});
-				
-			var firstRoute = L.polyline([
-			[56.48620328266, -2.84117751382],
-			[56.47945450348, -2.87263909733],
-            [56.47841215403, -2.88660999888],			
-				
-			], {
-			color: 'red',
-			weight: 10,
-			opacity: 1,
-			smoothFactor: 1
-			} ).addTo(map);	
 			
-			var secondRoute = L.polyline([
-			[56.67316772, -3.004418653],
-			[56.47738866, -2.931897772],
-			[56.48141966, -2.952422347],
-			[56.47738866, -2.931897772],
-							
-			], {
-			color: 'red',
-			weight: 10,
-			opacity: 1,
-			smoothFactor: 1
-			} ).addTo(map);	
-			
-			var numberFiveBusRouteOptions =
+			var BusRouteOptions =
 			{
 			'color': 'red',
 			'weight': '10',
@@ -131,7 +106,8 @@
 			'smoothFactor': '1'
 			}
 			
-			var thirdRoute = L.polyline(numberFiveBusRoute, numberFiveBusRouteOptions).addTo(map);
+			var numberFiveBus = L.polyline(numberFiveBusRoute, BusRouteOptions).addTo(map);
+			var numberOneBus = L.polyline(numberOneBusRoute, BusRouteOptions).addTo(map);
 			
 			</script>			
 		</div>
