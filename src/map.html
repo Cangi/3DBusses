@@ -1,20 +1,95 @@
-<!DOCTYPE HTML>
 <html>
-  <head>
-    <script src="https://cdn-webgl.wrld3d.com/wrldjs/dist/latest/wrld.js"></script>
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.0.1/leaflet.css" rel="stylesheet" />
-  </head>
-  
-  <body>
-  <div style="position: relative">
-    <div id="map" style="height: 100%"></div>
-    <script>
-      var map = L.Wrld.map("map", "77e6434b40e627a85d9b43432da1f95a", {
-        center: [37.7858, -122.401],
-        zoom: 16
-      });
-    </script>
+<head>
+<script src="https://cdn-webgl.wrld3d.com/wrldjs/dist/latest/wrld.js"></script>
+<link href="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.0.1/leaflet.css" rel="stylesheet" />
+<link rel="stylesheet" href="testcss.css">
 
-  </div>
-  </body>
+</head>
+<body>
+
+	<div style="position: relative">
+		<div id="map" style="height: 100%"></div>		
+			<script>
+			
+			var map = L.Wrld.map("map", "c976700dbe05df6d18bdab38af2b1ae2", {center: [56.458522, -2.97107], zoom: 15});
+				
+			var firstRoute = L.polyline([
+			[56.48620328266, -2.84117751382],
+			[56.47945450348, -2.87263909733],
+            [56.47841215403, -2.88660999888],			
+				
+			], {
+			color: 'red',
+			weight: 10,
+			opacity: 1,
+			smoothFactor: 1
+			} ).addTo(map);	
+			
+			var secondRoute = L.polyline([
+			[56.67316772, -3.004418653],
+			[56.47738866, -2.931897772],
+			[56.48141966, -2.952422347],
+			[56.47738866, -2.931897772],
+							
+			], {
+			color: 'red',
+			weight: 10,
+			opacity: 1,
+			smoothFactor: 1
+			} ).addTo(map);	
+			
+			var numberFiveBusRoute = 
+			[
+			[56.459659, -2.970661],//City Centre - Whitehall Street
+			[56.459806, -2.970982],
+			[56.457574, -2.975270],
+			[56.457051, -2.976864],
+			[56.456401, -2.981768],
+			[56.455913, -2.991500],//West-End Perth Road - Step-Row
+			[56.456450, -2.995985],
+			[56.456865, -3.024849],
+			[56.458163, -3.037867],
+			[56.458725, -3.039992],
+			[56.459002, -3.039917],
+			[56.459071, -3.039467],
+			[56.459569, -3.033105],
+			[56.462275, -3.030664],
+			[56.462489, -3.030689],
+			[56.464004, -3.032980],
+			[56.464413, -3.039369],//Ninewells Hospital - Stance B
+			[56.465204, -3.043551],
+			[56.464099, -3.043935],
+			[56.463766, -3.043581],
+			[56.463507, -3.043730],
+			[56.463433, -3.043637],
+			[56.463379, -3.043767],
+			[56.463467, -3.043872],
+			[56.464184, -3.046978],
+			[56.464245, -3.048843],
+			[56.464169, -3.049002],
+			[56.462844, -3.049284],
+			[56.462551, -3.049623],
+			[56.463030, -3.050724],
+			[56.463223, -3.051866],
+			[56.463176, -3.053020],
+			[56.463020, -3.053183],
+			[56.463093, -3.053424],
+			[56.463260, -3.053352],	
+			[56.464913, -3.056310]//Technology Park - Luna Place		
+			]
+			
+			var numberFiveBusRouteOptions =
+			{
+			'color': 'red',
+			'weight': '10',
+			'opacity': '1',
+			'smoothFactor': '1'
+			}
+			
+			var thirdRoute = L.polyline(numberFiveBusRoute, numberFiveBusRouteOptions).addTo(map);	
+			
+			</script>			
+		</div>
+	</div>
+</body>
 </html>
