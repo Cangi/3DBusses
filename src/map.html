@@ -18,13 +18,13 @@
 			// create custom icon
     		var BusStop = L.Icon.extend({
     		options: {
-        		iconSize:     [50, 50],
-        		iconAnchor:   [22, 94],
+        		iconSize:     [75, 75],
+        		iconAnchor:   [32.5, 75],
         		popupAnchor:  [-3, -76]
     			}
 			});
 
-			var linkBusStop = 'https://maps.umd.edu/map/img/wmata_bus2.png'
+			var linkBusStop = 'https://cdn3.iconfinder.com/data/icons/transport-29/100/22-512.png'
 			var linkBusStation = 'https://cdn2.iconfinder.com/data/icons/large-home-icons/512/Bus_station_transportation_space.png'
 
 			var stop1 = new BusStop({iconUrl: linkBusStop});
@@ -39,31 +39,64 @@
       			[56.455913, -2.991500],
       			[56.464413, -3.039369],
       			[56.464913, -3.056310],
-      			//[ 56.454, -2.9707]
+      			[56.459983, -2.969878], //Crichton Street (C2) bus stop. 
+      			[56.478883, -2.952696], //Lamerton Terrace bus stop.
+      			[56.493383, -2.935541], // Findowrie Street terminus - (Fintry Road) bus stop
     			];
     			
     		var locationBusStations = [
       			[ 56.4631, -2.966], // Seagate
     			];
 
-			// Sets the map on all markers in the array.
-      		function setMapOnAll(map) {
-        		for (i = 0; i < locations.length; i++) {
-          			markers[i].setMap(map);
-        		}
-      		}
+			var stopsArray = []
+			var stationsArray = []
 
 			for (i = 0; i < locations.length; i++) {  
-		
-				L.marker([locations[i][0], locations[i][1]], {icon: stop1}).addTo(map).bindPopup("Bus stop");
+				
+				var stops = L.marker([locations[i][0], locations[i][1]], {icon: stop1}).bindPopup("Bus stop");
+				stopsArray[i] = stops
 		
       		};
       
       		for (i = 0; i < locationBusStations.length; i++) {  
 	
-        		L.marker([locationBusStations[i][0], locationBusStations[i][1]], {icon: stopBusStation}).addTo(map).bindPopup("Bus station");
-        
+        		var stations = L.marker([locationBusStations[i][0], locationBusStations[i][1]], {icon: stopBusStation}).bindPopup("Bus station");
+        		stationsArray[i] = stations
       		};
+      		
+      		//Hide  BUS STOPS markers when zoomed out
+      		var stopMarkers = new L.FeatureGroup();
+      		
+      		for (i = 0; i < locations.length; i++) {
+      		
+      			stopMarkers.addLayer(stopsArray[i]);
+      		 }
+      		
+      		map.on('zoomend', function() {
+    			if (map.getZoom() < 14){
+            		map.removeLayer(stopMarkers);
+    				}
+    				else {
+            		map.addLayer(stopMarkers);
+        			}
+			});
+			
+			//Hide  BUS STATIONS markers when zoomed out
+			var stationMarkers = new L.FeatureGroup();
+      		
+      		for (i = 0; i < locationBusStations.length; i++) {
+      		
+      			stationMarkers.addLayer(stationsArray[i]);
+      		 }
+      		
+      		map.on('zoomend', function() {
+    			if (map.getZoom() < 14){
+            		map.removeLayer(stationMarkers);
+    				}
+    				else {
+            		map.addLayer(stationMarkers);
+        			}
+			});
 				
 			var firstRoute = L.polyline([
 			[56.48620328266, -2.84117751382],
