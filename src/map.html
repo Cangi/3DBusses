@@ -14,6 +14,57 @@
 			
 			var map = L.Wrld.map("map", "c976700dbe05df6d18bdab38af2b1ae2", {center: [56.458522, -2.97107], zoom: 15});
 				
+				
+			// create custom icon
+    		var BusStop = L.Icon.extend({
+    		options: {
+        		iconSize:     [50, 50],
+        		iconAnchor:   [22, 94],
+        		popupAnchor:  [-3, -76]
+    			}
+			});
+
+			var linkBusStop = 'https://maps.umd.edu/map/img/wmata_bus2.png'
+			var linkBusStation = 'https://cdn2.iconfinder.com/data/icons/large-home-icons/512/Bus_station_transportation_space.png'
+
+			var stop1 = new BusStop({iconUrl: linkBusStop});
+			var stopBusStation = new BusStop({iconUrl: linkBusStation});
+    
+    		L.icon = function (options) {
+    			return new L.Icon(options);
+			};
+			
+			var locations = [
+      			[56.459659, -2.970661],
+      			[56.455913, -2.991500],
+      			[56.464413, -3.039369],
+      			[56.464913, -3.056310],
+      			//[ 56.454, -2.9707]
+    			];
+    			
+    		var locationBusStations = [
+      			[ 56.4631, -2.966], // Seagate
+    			];
+
+			// Sets the map on all markers in the array.
+      		function setMapOnAll(map) {
+        		for (i = 0; i < locations.length; i++) {
+          			markers[i].setMap(map);
+        		}
+      		}
+
+			for (i = 0; i < locations.length; i++) {  
+		
+				L.marker([locations[i][0], locations[i][1]], {icon: stop1}).addTo(map).bindPopup("Bus stop");
+		
+      		};
+      
+      		for (i = 0; i < locationBusStations.length; i++) {  
+	
+        		L.marker([locationBusStations[i][0], locationBusStations[i][1]], {icon: stopBusStation}).addTo(map).bindPopup("Bus station");
+        
+      		};
+				
 			var firstRoute = L.polyline([
 			[56.48620328266, -2.84117751382],
 			[56.47945450348, -2.87263909733],
@@ -47,7 +98,7 @@
 			'smoothFactor': '1'
 			}
 			
-			var thirdRoute = L.polyline(numberFiveBusRoute, numberFiveBusRouteOptions).addTo(map);	
+			var thirdRoute = L.polyline(numberFiveBusRoute, numberFiveBusRouteOptions).addTo(map);
 			
 			</script>			
 		</div>
