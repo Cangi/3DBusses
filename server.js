@@ -28,5 +28,5 @@ app.use('/', routes);
 app.get('/', (req, res) => {
     res.sendFile(path.join(__dirname + '/src/map.html'));
 });
-
+app.use(express.static(__dirname + '/assets'));
 app.listen(port, () => console.log('Listening on port 3000!'));
