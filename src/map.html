@@ -2,6 +2,7 @@
 <head>
 <script src="https://cdn-webgl.wrld3d.com/wrldjs/dist/latest/wrld.js"></script>
 <script src="testRoute.js"></script>
+<script src="busStopList.js"></script>
 <link href="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.0.1/leaflet.css" rel="stylesheet" />
 <link rel="stylesheet" href="testcss.css">
 
@@ -34,20 +35,6 @@
     			return new L.Icon(options);
 			};
 			
-			var locations = [
-      			[56.459659, -2.970661],
-      			[56.455913, -2.991500],
-      			[56.464413, -3.039369],
-      			[56.464913, -3.056310],
-      			[56.459983, -2.969878], //Crichton Street (C2) bus stop. 
-      			[56.478883, -2.952696], //Lamerton Terrace bus stop.
-      			[56.493383, -2.935541], // Findowrie Street terminus - (Fintry Road) bus stop
-    			];
-    			
-    		var locationBusStations = [
-      			[ 56.4631, -2.966], // Seagate
-    			];
-
 			var stopsArray = []
 			var stationsArray = []
 
@@ -100,9 +87,9 @@
 			
 			var BusRouteOptions =
 			{
-			'color': 'red',
-			'weight': '10',
-			'opacity': '1',
+			'color': 'blue',
+			'weight': '8',
+			'opacity': '0.5',
 			'smoothFactor': '1'
 			}
 			
