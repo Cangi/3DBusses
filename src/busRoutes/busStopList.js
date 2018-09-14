@@ -13,13 +13,20 @@ var locations = [
       			[56.480609, -3.001139], //Kings Cross Road - opp B&Q 
       			[56.483013, -3.011505], //Baird Avenue - Tesco Call Centre 
       			[56.496252, -3.018334], //St Marys - Laird Street, Benholm Place 
+      			
+      			//Route 23S
+      			[56.480319, -3.022696], //Linton Road
+      			[56.471722, -3.016213], //Sharps Court
+      			[56.464778, -3.026638], //The Shand 
+      			[56.456497, -3.009936], //Harris Academy Perth Road
+      			
 				
 				//Route 5
       			[56.459659, -2.970661], //City Centre - Whitehall Street  
       			[56.455913, -2.991500], //West-End Perth Road - Step-Row  
       			[56.464413, -3.039369], //Ninewells Hospital - Stance B  
       			[56.464913, -3.056310], //Technology Park - Luna Place  
-    			];
+    			];  			
     			
 var locationBusStations = [
       			[ 56.4631, -2.966], // Seagate

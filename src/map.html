@@ -24,6 +24,12 @@
         		popupAnchor:  [-3, -76]
     			}
 			});
+			/*
+			var popupLink = $('<a href="#" class="speciallink">TestLink</a>').click(function() {
+    			alert("test");
+			})[0];
+			*/
+			//marker.bindPopup(popupLink);
 
 			//links to images used for stops
 			var linkBusStop = 'https://cdn.iconscout.com/icon/premium/png-512-thumb/bus-stop-10-660162.png'
@@ -39,16 +45,22 @@
 			var stopsArray = []
 			var stationsArray = []
 
+			//Add bus stops
 			for (i = 0; i < locations.length; i++) {  
 				
-				var stops = L.marker([locations[i][0], locations[i][1]], {icon: stop1}).bindPopup("Bus stop");
+				var stops = L.marker([locations[i][0], locations[i][1]], {icon: stop1}).on('click', function() {
+				
+					alert("Schedule");
+				});
+				
 				stopsArray[i] = stops
 		
       		};
-      
+      		
+      		//Add bus stations
       		for (i = 0; i < locationBusStations.length; i++) {  
 	
-        		var stations = L.marker([locationBusStations[i][0], locationBusStations[i][1]], {icon: stopBusStation}).bindPopup("Bus station");
+        		var stations = L.marker([locationBusStations[i][0], locationBusStations[i][1]], {icon: stopBusStation}).bindPopup('<button>Schedule</a>');
         		stationsArray[i] = stations
       		};
       		
@@ -60,6 +72,7 @@
       			stopMarkers.addLayer(stopsArray[i]);
       		 }
       		
+      		map.addLayer(stopMarkers); // Add markers the first time the page is loaded
       		map.on('zoomend', function() {
     			if (map.getZoom() < 14){
             		map.removeLayer(stopMarkers);
@@ -76,7 +89,8 @@
       		
       			stationMarkers.addLayer(stationsArray[i]);
       		 }
-      		
+      		 
+      		map.addLayer(stationMarkers); // Add markers the first time the page is loaded
       		map.on('zoomend', function() {
     			if (map.getZoom() < 14){
             		map.removeLayer(stationMarkers);
