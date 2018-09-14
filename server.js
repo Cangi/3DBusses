@@ -12,6 +12,7 @@ let db = mongoose.connection;
 let port = 3000;
 app.use(express.static(__dirname + '/src/busRoutes'));
 app.use(express.static(__dirname + '/assets'));
+app.use(express.static(__dirname + '/src'));
 // Check connection
 db.once('open', () =>{
   console.log('Connected to MongoDB');
