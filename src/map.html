@@ -97,11 +97,15 @@
 			
 			//creates each route
 			var numberOneBus = L.polyline(numberOneBusRoute, {color: getRandomColor(), className: 'BusOptions'}).addTo(map);
+			numberOneBus.on('click', onBusClick);
 			var numberFourBus = L.polyline(numberFourBusRoute, {color: getRandomColor(), className: 'BusOptions'}).addTo(map);
+			numberFourBus.on('click', onBusClick);
 			var numberFiveBus = L.polyline(numberFiveBusRoute, {color: getRandomColor(), className: 'BusOptions'}).addTo(map);
+			numberFiveBus.on('click', onBusClick);
 			var numberTwentyThreeSBus = L.polyline(numberTwentyThreeSRoute, {color: getRandomColor(), className: 'BusOptions'}).addTo(map);
+			numberTwentyThreeSBus.on('click', onBusClick);
 			var numberThirtyTwoBus = L.polyline(numberThirtyTwoBusRoute, {color: getRandomColor(), className: 'BusOptions'}).addTo(map);
-			
+			numberThirtyTwoBus.on('click', onBusClick);
 			
 			
 			function getRandomColor() {
@@ -111,6 +115,9 @@
 				return color;
 			}
 
+			function onBusClick(){	
+				alert("Clicked on a route");
+			}
 
 			
 			
