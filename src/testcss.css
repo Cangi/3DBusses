@@ -1,0 +1,17 @@
+/* css to customize Leaflet default styles  */
+
+
+.BusOptions{
+	fill: none; 
+	stroke-width: 8;  
+	opacity: 0.5;
+	
+}
+
+.BusOptions:hover{
+	stroke: #03337f;
+	fill: none; 
+	stroke-width: 10;
+	opacity: 1;
+	
+}
