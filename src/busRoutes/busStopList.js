@@ -19,6 +19,12 @@ var locations = [
       			[56.455913, -2.991500], //West-End Perth Road - Step-Row  
       			[56.464413, -3.039369], //Ninewells Hospital - Stance B  
       			[56.464913, -3.056310], //Technology Park - Luna Place  
+				
+				//Route 23S
+				 [56.480319, -3.022696],//Linton Road BUS STOP
+				 [56.471722, -3.016213],//Sharps Court BUS STOP 
+				 [56.464778, -3.026638],//The Shand BUS STOP
+				 [56.456497, -3.009936] //Harris Academy Perth Road BUS STOP.
     			];
     			
 var locationBusStations = [

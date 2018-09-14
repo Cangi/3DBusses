@@ -59,7 +59,7 @@
       		
       			stopMarkers.addLayer(stopsArray[i]);
       		 }
-      		
+      		map.addLayer(stopMarkers);
       		map.on('zoomend', function() {
     			if (map.getZoom() < 14){
             		map.removeLayer(stopMarkers);
@@ -76,7 +76,7 @@
       		
       			stationMarkers.addLayer(stationsArray[i]);
       		 }
-      		
+      		map.addLayer(stationMarkers);
       		map.on('zoomend', function() {
     			if (map.getZoom() < 14){
             		map.removeLayer(stationMarkers);
