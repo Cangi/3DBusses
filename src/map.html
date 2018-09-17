@@ -25,11 +25,9 @@
         		popupAnchor:  [-3, -76]
     			}
 			});
-
 			//links to images used for stops
 			var linkBusStop = 'https://cdn.iconscout.com/icon/premium/png-512-thumb/bus-stop-10-660162.png'
 			var linkBusStation = 'https://cdn2.iconfinder.com/data/icons/large-home-icons/512/Bus_station_transportation_space.png'
-
 			var stop1 = new BusStop({iconUrl: linkBusStop});
 			var stopBusStation = new BusStop({iconUrl: linkBusStation});
     
@@ -51,10 +49,10 @@
     			var windowFeatures = "width=" + width + ",height=" + height + ",status,resizable,left=" + left + ",top=" + top;
     				
 				myWindow = window.open("", "", windowFeatures);
-				myWindow.document.write('Schedule');
+				var txt = "schedule";
+				myWindow.document.write("<center>" + txt.fontsize(6) + "</center>");
 			
 			}
-
 			//Add bus stops
 			for (i = 0; i < locations.length; i++) {  
 				
@@ -107,27 +105,34 @@
         			}
 			});
 						
-			
-			$.get({
-			url: "/getBusStops",
-			data : {busNumber : "20"},
-			success : function(json) {
-				routes['20'] = json[0].route;
-				console.log(routes["20"]);
+			function getRoute(x)
+			{
+				var busNumber = x;
+				$.get({
+					url: "/getBusStops",
+					data : {busNumber : x},
+					success : function(json) {
+						routes[x] = json[0].route;				
+						var bus = L.polyline(routes[x], {color: getRandomColor(), className: 'BusOptions'}).addTo(map);
+						
+						function OnBusClick() {
+							alert("This is route : " + x);
+						}
+						bus.on('click', L.bind(OnBusClick, null, x));
+						
+										
+				
+		
+					}
+				})
 			}
-		})
-			//creates each route
-			var numberOneBus = L.polyline(numberOneBusRoute, {color: getRandomColor(), className: 'BusOptions'}).addTo(map);
-			numberOneBus.on('click', onBusClick);
-			var numberFourBus = L.polyline(numberFourBusRoute, {color: getRandomColor(), className: 'BusOptions'}).addTo(map);
-			numberFourBus.on('click', onBusClick);
-			var numberFiveBus = L.polyline(numberFiveBusRoute, {color: getRandomColor(), className: 'BusOptions'}).addTo(map);
-			numberFiveBus.on('click', onBusClick);
-			var numberTwentyThreeSBus = L.polyline(numberTwentyThreeSRoute, {color: getRandomColor(), className: 'BusOptions'}).addTo(map);
-			numberTwentyThreeSBus.on('click', onBusClick);
-			var numberThirtyTwoBus = L.polyline(numberThirtyTwoBusRoute, {color: getRandomColor(), className: 'BusOptions'}).addTo(map);
-			numberThirtyTwoBus.on('click', onBusClick);
 			
+			//creates each route
+			var numberOneBus = getRoute(1);
+			var numberFourBus = getRoute(4);
+			var numberFiveBus = getRoute(5);
+			var numberTwentyThreeSBus = getRoute(23);
+			var numberThirtyTwoBus = getRoute(32);
 			
 			function getRandomColor() {
 				var color = '#'; // hexadecimal starting symbol
@@ -135,12 +140,6 @@
                 color += letters[Math.floor(Math.random() * letters.length)];
 				return color;
 			}
-
-			function onBusClick(){	
-				alert("Clicked on a route");
-			}
-
-			
 			
 			</script>		
 		</div>
