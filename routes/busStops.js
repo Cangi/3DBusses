@@ -25,12 +25,31 @@ router.post('/createRoute',(req,res) =>{
 });
 router.post('/generateRoute',(req,res) =>{
   console.log(busRoute);
-  Bus.findOneAndUpdate({number:req.param('busNumber')},{$push: {route:{$each: busRoute}}}, function (err){
+  Bus.findOne({number:req.param('busNumber')}, function (err,bus){
     if(err) throw err;
+    if(bus){
+      Bus.findOneAndUpdate({number:req.param('busNumber')}, {$set:{route: busRoute}}, (err) => {
+        if(err) throw err;
+     })
+    }else{
+      var bus = new Bus({
+        number: req.param('busNumber'),
+        route : busRoute
+      });
+      bus.save(function (err) {
+        if (err) return handleError(err);
+      });
+      console.log("new one added");
+    }
     busRoute = [];
     res.send('Route Added');
   });
 });
+
+router.get('/resetRoute', (req,res) => {
+  busRoute = [];
+  res.send("reseted");
+})
 
 router.get('/addBusStop',(req,res) =>{
     console.log(req.param('busNumber'));

@@ -32,7 +32,17 @@
 				console.log("requested access complete");
 			}
 		})
-      });
+	  });
+	  
+	  function resetRoute(){
+		$.get({
+			url: "/resetRoute",
+			data : "reset",
+			success : function(json) {
+				console.log("route reseted");
+			}
+		})
+	  }
 						
 				
 			</script>			
@@ -43,6 +53,7 @@
 		<input type="text" name="busNumber" value="">
 		<br>
 		<input type="submit" value="Submit">
+		<button type="button" onclick="resetRoute()">Reset</button>
 	</form>
 </body>
 </html>
