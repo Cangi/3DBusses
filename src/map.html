@@ -51,7 +51,8 @@
     			var windowFeatures = "width=" + width + ",height=" + height + ",status,resizable,left=" + left + ",top=" + top;
     				
 				myWindow = window.open("", "", windowFeatures);
-				myWindow.document.write('Schedule');
+				var txt = "schedule";
+				myWindow.document.write("<center>" + txt.fontsize(6) + "</center>");
 			
 			}
 
