@@ -19,7 +19,8 @@
         indoorsEnabled: true,
         displayEntranceMarkers: false
 	  });
-	  map.on("click", function(e) {
+	  //right click
+	  map.on("contextmenu", function(e) {
         pixelPosition = e.layerPoint;
 		latLng = map.layerPointToLatLng(pixelPosition);
 		let position = JSON.stringify(latLng);
