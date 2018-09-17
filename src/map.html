@@ -39,13 +39,26 @@
 			
 			var stopsArray = []
 			var stationsArray = []
+			
+			//Open schedule when a bus stop/station is clicked
+			function newWindow() {
+			
+				var myWindow;
+    			var width = 400;
+    			var height = 300;
+    			var left = parseInt((screen.availWidth/2) - (width/2));
+    			var top = parseInt((screen.availHeight/2) - (height/2));
+    			var windowFeatures = "width=" + width + ",height=" + height + ",status,resizable,left=" + left + ",top=" + top;
+    				
+				myWindow = window.open("", "", windowFeatures);
+				myWindow.document.write('Schedule');
+			
+			}
 
 			//Add bus stops
 			for (i = 0; i < locations.length; i++) {  
 				
-				var stops = L.marker([locations[i][0], locations[i][1]], {icon: stop1}).on('click', function() {
-					alert("Schedule");
-				});
+				var stops = L.marker([locations[i][0], locations[i][1]], {icon: stop1}).on('click', function() {newWindow()});
 				
 				stopsArray[i] = stops
 		
@@ -54,7 +67,7 @@
       		//Add bus stations
       		for (i = 0; i < locationBusStations.length; i++) {  
 	
-        		var stations = L.marker([locationBusStations[i][0], locationBusStations[i][1]], {icon: stopBusStation}).bindPopup('<button>Schedule</a>');
+        		var stations = L.marker([locationBusStations[i][0], locationBusStations[i][1]], {icon: stopBusStation}).on('click', function(){newWindow()});
         		stationsArray[i] = stations
       		};
       		
