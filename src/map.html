@@ -14,6 +14,7 @@
 		<div id="map" style="height: 100%"></div>		
 			<script>
 			let routes = {};
+
 			//create map 
 			var map = L.Wrld.map("map", "c976700dbe05df6d18bdab38af2b1ae2", {center: [56.458522, -2.97107], zoom: 15});
 						
@@ -25,6 +26,7 @@
         		popupAnchor:  [-3, -76]
     			}
 			});
+
 			//links to images used for stops
 			var linkBusStop = 'https://cdn.iconscout.com/icon/premium/png-512-thumb/bus-stop-10-660162.png'
 			var linkBusStation = 'https://cdn2.iconfinder.com/data/icons/large-home-icons/512/Bus_station_transportation_space.png'
@@ -69,15 +71,16 @@
         		stationsArray[i] = stations
       		};
       		
-      		//Hide  BUS STOPS markers when zoomed out
+      		//Hide  bus stops markers when zoomed out
       		var stopMarkers = new L.FeatureGroup();
       		
       		for (i = 0; i < locations.length; i++) {
       		
       			stopMarkers.addLayer(stopsArray[i]);
-      		 }
-      		
-      		map.addLayer(stopMarkers); // Add markers the first time the page is loaded
+			}
+			   
+      		 // Add markers the first time the page is loaded
+      		map.addLayer(stopMarkers);
       		map.on('zoomend', function() {
     			if (map.getZoom() < 14){
             		map.removeLayer(stopMarkers);
@@ -87,15 +90,16 @@
         			}
 			});
 			
-			//Hide  BUS STATIONS markers when zoomed out
+			//Hide  bus stations markers when zoomed out
 			var stationMarkers = new L.FeatureGroup();
       		
       		for (i = 0; i < locationBusStations.length; i++) {
       		
       			stationMarkers.addLayer(stationsArray[i]);
-      		 }
-      		 
-      		map.addLayer(stationMarkers); // Add markers the first time the page is loaded
+      		}
+			   
+			// Add markers the first time the page is loaded
+      		map.addLayer(stationMarkers);
       		map.on('zoomend', function() {
     			if (map.getZoom() < 14){
             		map.removeLayer(stationMarkers);
@@ -135,15 +139,13 @@
 			var numberThirtyTwoBus = getRoute(32);
 			
 			function getRandomColor() {
-				var color = '#'; // hexadecimal starting symbol
+				// hexadecimal starting symbol
+				var color = '#'; 
                 var letters = ['ef0b0b','ef670b','1bc415','26e2c0','9c73dd','ff1c63', '291A6D', '3B552E', '922C2C', '82244D', 'B62222', '2B781F', '85B87D', 'E9E43D', 'DD832F', '9F7676', '1D2FB2', 'efd809', '00705d', '004570', '310449', 'b7005b']; //Set your colors here
                 color += letters[Math.floor(Math.random() * letters.length)];
 				return color;
 			}
-<<<<<<< HEAD
-=======
 
->>>>>>> 7f94c2e08e3f67dfdf0238980c1e795da6e812d5
 			
 			</script>		
 		</div>
