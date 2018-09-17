@@ -3,6 +3,7 @@
 <script src="https://cdn-webgl.wrld3d.com/wrldjs/dist/latest/wrld.js"></script>
 <script src="busRoutes.js"></script>
 <script src="busStopList.js"></script>
+<script src="https://code.jquery.com/jquery-3.3.1.js" integrity="sha256-2Kok7MbOyxpgUVvAk/HJ2jigOSYS2auK4Pfzbm7uH60=" crossorigin="anonymous"></script>
 <link href="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.0.1/leaflet.css" rel="stylesheet" />
 <link rel="stylesheet" href="testcss.css">
 
@@ -12,7 +13,7 @@
 	<div style="position: relative">
 		<div id="map" style="height: 100%"></div>		
 			<script>
-			
+			let routes = {};
 			//create map 
 			var map = L.Wrld.map("map", "c976700dbe05df6d18bdab38af2b1ae2", {center: [56.458522, -2.97107], zoom: 15});
 						
@@ -94,7 +95,14 @@
 			});
 						
 			
-			
+			$.get({
+			url: "/getBusStops",
+			data : {busNumber : "20"},
+			success : function(json) {
+				routes['20'] = json[0].route;
+				console.log(routes["20"]);
+			}
+		})
 			//creates each route
 			var numberOneBus = L.polyline(numberOneBusRoute, {color: getRandomColor(), className: 'BusOptions'}).addTo(map);
 			numberOneBus.on('click', onBusClick);
