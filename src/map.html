@@ -54,15 +54,29 @@
 				myWindow = window.open("", "mywindow", windowFeatures);
 				setTimeout(function(){
 				myWindow.document.title = 'Bus schdule' ;
-				}, 10) ;//open() and title() is asynchronous
+				}, 10);//open() and title() is asynchronous
+				
 				var txt = "schedule";
 				myWindow.document.write("<center>" + txt.fontsize(6) + "</center>");
-				myWindow.document.write(locations[value][2]);
+				
+				if (value < 100) { // Distinguish better a bus stop and a bus station
+				
+					myWindow.document.write ("Bus stop nº: " + locations[value][2] + "<br></br>");
+					myWindow.document.write ("This is route " + locations[value][3] + "<br></br>");
+					myWindow.document.write ("Bus stop name: " + locations[value][4]);
+				}
+				else {
+					value = value - 1000 // Get the real value again
+					myWindow.document.write ("Bus Station nº: " + locationBusStations[value][2] + "<br></br>");
+					myWindow.document.write ("This is in route " + locationBusStations[value][3] + "<br></br>");
+					myWindow.document.write ("Station name: " + locations[value][4]);
+					
+				}
+				
 			}
 			//Add bus stops
 			for (i = 0; i < locations.length; i++) {  
 				var x = i
-				//var stops = L.marker([locations[i][0], locations[i][1]], {icon: stop1}).on('click', function() {newWindow(x)});
 				var stops = L.marker([locations[i][0], locations[i][1]], {icon: stop1}).on('click', L.bind(newWindow, null, x));
 				console.log(x)
 				stopsArray[i] = stops
@@ -71,9 +85,10 @@
       		
       		//Add bus stations
       		for (i = 0; i < locationBusStations.length; i++) {  
-	
-        		var stations = L.marker([locationBusStations[i][0], locationBusStations[i][1]], {icon: stopBusStation}).on('click', function(){newWindow()});
+				var z = 1000 + i // Distinguish better a bus stop and a bus station
+        		var stations = L.marker([locationBusStations[i][0], locationBusStations[i][1]], {icon: stopBusStation}).on('click', L.bind(newWindow, null, z));
         		stationsArray[i] = stations
+        		
       		};
       		
       		//Hide  bus stops markers when zoomed out
@@ -179,7 +194,6 @@
 				}
 				return color;
 			}
-
 			
 			</script>		
 		</div>
