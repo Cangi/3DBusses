@@ -59,9 +59,18 @@
 				var txt = "schedule";
 				myWindow.document.write("<center>" + txt.fontsize(6) + "</center>");
 				
-				myWindow.document.write ("Bus stop nº: " + locations[value][2] + "<br></br>");
+				if (value < 100) { // Distinguish better a bus stop and a bus station
 				
-				myWindow.document.write ("This is route " + locations[value][3]);
+					myWindow.document.write ("Bus stop nº: " + locations[value][2] + "<br></br>");
+					myWindow.document.write ("This is route " + locations[value][3]);
+				}
+				else {
+					value = value - 1000 // Get the real value again
+					myWindow.document.write ("Bus Station nº: " + locationBusStations[value][2] + "<br></br>");
+					myWindow.document.write ("This is in route " + locationBusStations[value][3]);
+					
+				}
+				
 			}
 			//Add bus stops
 			for (i = 0; i < locations.length; i++) {  
@@ -74,7 +83,7 @@
       		
       		//Add bus stations
       		for (i = 0; i < locationBusStations.length; i++) {  
-				var z = i
+				var z = 1000 + i // Distinguish better a bus stop and a bus station
         		var stations = L.marker([locationBusStations[i][0], locationBusStations[i][1]], {icon: stopBusStation}).on('click', L.bind(newWindow, null, z));
         		stationsArray[i] = stations
         		

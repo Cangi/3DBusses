@@ -31,7 +31,7 @@ var locations = [
     		
 				//Route 75
 				[56.459985, -2.970808, 20],//City Centre, High Street (Stop 3)
-				[56.463849, -2.964979, 21],//City Centre, Bus Station
+				//[56.463849, -2.964979, 21],//City Centre, Bus Station
 				[56.469494, -2.894323, 22],//West Ferry/Broughty Ferry, Ogilvie Court
 				[56.468344, -2.875823, 23],//Broughty Ferry, Library
 				[56.481033, -2.836319, 24],//Monifieth, Grange Primary School
@@ -40,7 +40,8 @@ var locations = [
 				
 
 var locationBusStations = [
-      			[ 56.4631, -2.966, 0], // Seagate
+      			
+      			[56.463849, -2.964979, 21, 75],//City Centre, Bus Station
     			];
 
    
