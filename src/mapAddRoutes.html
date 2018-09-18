@@ -1,49 +1,60 @@
 <html>
-<head>
-<script src="https://cdn-webgl.wrld3d.com/wrldjs/dist/latest/wrld.js"></script>
-<script src="https://code.jquery.com/jquery-3.3.1.js" integrity="sha256-2Kok7MbOyxpgUVvAk/HJ2jigOSYS2auK4Pfzbm7uH60=" crossorigin="anonymous"></script>
-<script src="busRoutes.js"></script>
-<script src="busStopList.js"></script>
-<link href="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.0.1/leaflet.css" rel="stylesheet" />
-<link rel="stylesheet" href="testcss.css">
+	<head>
+		<script src="https://cdn-webgl.wrld3d.com/wrldjs/dist/latest/wrld.js"></script>
+		<script src="https://code.jquery.com/jquery-3.3.1.js" integrity="sha256-2Kok7MbOyxpgUVvAk/HJ2jigOSYS2auK4Pfzbm7uH60=" crossorigin="anonymous"></script>
+		<script src="busRoutes.js"></script>
+		<script src="busStopList.js"></script>
+		<link href="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.0.1/leaflet.css" rel="stylesheet" />
+		<link rel="stylesheet" href="testcss.css">
 
-</head>
-<body>
+	</head>
+	<body>
 
-	<div style="position: relative">
-		<div id="map" style="height: 100%"></div>		
-			<script>
-			var map = L.Wrld.map("map", "c976700dbe05df6d18bdab38af2b1ae2", {
-        center: [37.7858, -122.401],
-        zoom: 15,
-        indoorsEnabled: true,
-        displayEntranceMarkers: false
-	  });
-	  //right click
-	  map.on("contextmenu", function(e) {
-        pixelPosition = e.layerPoint;
-		latLng = map.layerPointToLatLng(pixelPosition);
-		let position = JSON.stringify(latLng);
-		//alert("Pixel position = "+pixelPosition + "\nLatLng = "+latLng);
-		console.log(latLng);
-		$.post({
-			url: "/createRoute",
-			data : {position},
-			success : function(json) {
-				console.log("requested access complete");
-			}
-		})
-      });
+		<div style="position: relative">
+			<div id="map" style="height: 100%"></div>		
+				<script>
+					var map = L.Wrld.map("map", "c976700dbe05df6d18bdab38af2b1ae2", {
+						center: [56.458522, -2.97107],
+						zoom: 15,
+						indoorsEnabled: true,
+						displayEntranceMarkers: false
+					});
+			
+					//right click
+					map.on("contextmenu", function(e) {
+						pixelPosition = e.layerPoint;
+						latLng = map.layerPointToLatLng(pixelPosition);
+						let position = JSON.stringify(latLng);
+						console.log(latLng);
+						$.post({
+							url: "/createRoute",
+							data : {position},
+							success : function(json) {
+								console.log("Point added");
+							}
+						})
+					});
+					
+					function resetRoute(){
+						$.get({
+							url: "/resetRoute",
+							data : "reset",
+							success : function(json) {
+								console.log("Route rested");
+							}
+						})
+					}
+								
 						
-				
-			</script>			
+				</script>			
+			</div>
 		</div>
-	</div>
-	<form action="/generateRoute" method="post">
-		Bus Number:<br>
-		<input type="text" name="busNumber" value="">
-		<br>
-		<input type="submit" value="Submit">
-	</form>
-</body>
+		<form action="/generateRoute" method="post">
+			Bus Number:<br>
+			<input type="text" name="busNumber" value="">
+			<br>
+			<input type="submit" value="Submit">
+			<button type="button" onclick="resetRoute()">Reset</button>
+		</form>
+	</body>
 </html>

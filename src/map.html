@@ -14,6 +14,7 @@
 		<div id="map" style="height: 100%"></div>		
 			<script>
 			let routes = {};
+
 			//create map 
 			var map = L.Wrld.map("map", "c976700dbe05df6d18bdab38af2b1ae2", {center: [56.458522, -2.97107], zoom: 15});
 						
@@ -29,7 +30,6 @@
 			//links to images used for stops
 			var linkBusStop = 'https://cdn.iconscout.com/icon/premium/png-512-thumb/bus-stop-10-660162.png'
 			var linkBusStation = 'https://cdn2.iconfinder.com/data/icons/large-home-icons/512/Bus_station_transportation_space.png'
-
 			var stop1 = new BusStop({iconUrl: linkBusStop});
 			var stopBusStation = new BusStop({iconUrl: linkBusStation});
     
@@ -60,7 +60,6 @@
 			    //document.write("<p>Fontcolor: " + txt.fontcolor("green") + "</p>");//change the color
 				//document.write("<p>Link: " + txt.link("https://www.w3schools.com") + "</p>");//add a link
 			}
-
 			//Add bus stops
 			for (i = 0; i < locations.length; i++) {  
 				
@@ -77,15 +76,16 @@
         		stationsArray[i] = stations
       		};
       		
-      		//Hide  BUS STOPS markers when zoomed out
+      		//Hide  bus stops markers when zoomed out
       		var stopMarkers = new L.FeatureGroup();
       		
       		for (i = 0; i < locations.length; i++) {
       		
       			stopMarkers.addLayer(stopsArray[i]);
-      		 }
-      		
-      		map.addLayer(stopMarkers); // Add markers the first time the page is loaded
+			}
+			   
+      		 // Add markers the first time the page is loaded
+      		map.addLayer(stopMarkers);
       		map.on('zoomend', function() {
     			if (map.getZoom() < 14){
             		map.removeLayer(stopMarkers);
@@ -95,15 +95,16 @@
         			}
 			});
 			
-			//Hide  BUS STATIONS markers when zoomed out
+			//Hide  bus stations markers when zoomed out
 			var stationMarkers = new L.FeatureGroup();
       		
       		for (i = 0; i < locationBusStations.length; i++) {
       		
       			stationMarkers.addLayer(stationsArray[i]);
-      		 }
-      		 
-      		map.addLayer(stationMarkers); // Add markers the first time the page is loaded
+      		}
+			   
+			// Add markers the first time the page is loaded
+      		map.addLayer(stationMarkers);
       		map.on('zoomend', function() {
     			if (map.getZoom() < 14){
             		map.removeLayer(stationMarkers);
@@ -113,40 +114,43 @@
         			}
 			});
 						
-			
-			$.get({
-			url: "/getBusStops",
-			data : {busNumber : "20"},
-			success : function(json) {
-				routes['20'] = json[0].route;
-				console.log(routes["20"]);
+			function getRoute(x)
+			{
+				var busNumber = x;
+				$.get({
+					url: "/getBusStops",
+					data : {busNumber : x},
+					success : function(json) {
+						routes[x] = json[0].route;				
+						var bus = L.polyline(routes[x], {color: getRandomColor(), className: 'BusOptions'}).addTo(map);
+						
+						function OnBusClick() {
+							alert("This is route : " + x);
+						}
+						bus.on('click', L.bind(OnBusClick, null, x));
+						
+										
+				
+		
+					}
+				})
 			}
-		})
-			//creates each route
-			var numberOneBus = L.polyline(numberOneBusRoute, {color: getRandomColor(), className: 'BusOptions'}).addTo(map);
-			numberOneBus.on('click', onBusClick);
-			var numberFourBus = L.polyline(numberFourBusRoute, {color: getRandomColor(), className: 'BusOptions'}).addTo(map);
-			numberFourBus.on('click', onBusClick);
-			var numberFiveBus = L.polyline(numberFiveBusRoute, {color: getRandomColor(), className: 'BusOptions'}).addTo(map);
-			numberFiveBus.on('click', onBusClick);
-			var numberTwentyThreeSBus = L.polyline(numberTwentyThreeSRoute, {color: getRandomColor(), className: 'BusOptions'}).addTo(map);
-			numberTwentyThreeSBus.on('click', onBusClick);
-			var numberThirtyTwoBus = L.polyline(numberThirtyTwoBusRoute, {color: getRandomColor(), className: 'BusOptions'}).addTo(map);
-			numberThirtyTwoBus.on('click', onBusClick);
 			
+			//creates each route
+			var numberOneBus = getRoute(1);
+			var numberFourBus = getRoute(4);
+			var numberFiveBus = getRoute(5);
+			var numberTwentyThreeSBus = getRoute(23);
+			var numberThirtyTwoBus = getRoute(32);
 			
 			function getRandomColor() {
-				var color = '#'; // hexadecimal starting symbol
+				// hexadecimal starting symbol
+				var color = '#'; 
                 var letters = ['ef0b0b','ef670b','1bc415','26e2c0','9c73dd','ff1c63', '291A6D', '3B552E', '922C2C', '82244D', 'B62222', '2B781F', '85B87D', 'E9E43D', 'DD832F', '9F7676', '1D2FB2', 'efd809', '00705d', '004570', '310449', 'b7005b']; //Set your colors here
                 color += letters[Math.floor(Math.random() * letters.length)];
 				return color;
 			}
 
-			function onBusClick(){	
-				alert("Clicked on a route");
-			}
-
-			
 			
 			</script>		
 		</div>
