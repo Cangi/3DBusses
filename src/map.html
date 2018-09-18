@@ -41,7 +41,7 @@
 			var stationsArray = []
 			
 			//Open schedule when a bus stop/station is clicked
-			function newWindow() {
+			function newWindow(value) {
 			
 				var myWindow;
     			var width = 400;
@@ -57,14 +57,14 @@
 				}, 10) ;//open() and title() is asynchronous
 				var txt = "schedule";
 				myWindow.document.write("<center>" + txt.fontsize(6) + "</center>");
-			    //document.write("<p>Fontcolor: " + txt.fontcolor("green") + "</p>");//change the color
-				//document.write("<p>Link: " + txt.link("https://www.w3schools.com") + "</p>");//add a link
+				myWindow.document.write(locations[value][2]);
 			}
 			//Add bus stops
 			for (i = 0; i < locations.length; i++) {  
-				
-				var stops = L.marker([locations[i][0], locations[i][1]], {icon: stop1}).on('click', function() {newWindow()});
-				
+				var x = i
+				//var stops = L.marker([locations[i][0], locations[i][1]], {icon: stop1}).on('click', function() {newWindow(x)});
+				var stops = L.marker([locations[i][0], locations[i][1]], {icon: stop1}).on('click', L.bind(newWindow, null, x));
+				console.log(x)
 				stopsArray[i] = stops
 		
       		};
@@ -113,7 +113,22 @@
             		map.addLayer(stationMarkers);
         			}
 			});
-						
+			
+			//create a feature group for routes
+			var routeFeatureGroup = new L.FeatureGroup();
+			//add all routes to map via layer
+      		map.addLayer(routeFeatureGroup);
+			//on zoomout varible <13, remove from map
+      		map.on('zoomend', function() {
+    			if (map.getZoom() < 13){
+            		map.removeLayer(routeFeatureGroup);
+    				}
+    				else {
+            		map.addLayer(routeFeatureGroup);
+        			}
+			});
+      			
+			//function which creates a route for a specific bus X
 			function getRoute(x)
 			{
 				var busNumber = x;
@@ -122,16 +137,21 @@
 					data : {busNumber : x},
 					success : function(json) {
 						routes[x] = json[0].route;				
-						var bus = L.polyline(routes[x], {color: getRandomColor(), className: 'BusOptions'}).addTo(map);
-						
+						//create the polyline
+						var bus = L.polyline(routes[x], {color: getRandomColor(), className: 'BusOptions'});
+						//add this route to the route group
+						routeFeatureGroup.addLayer(bus);
+						//event handler for onclick event
 						function OnBusClick() {
 							alert("This is route : " + x);
 						}
 						bus.on('click', L.bind(OnBusClick, null, x));
 						
-										
-				
-		
+						//on mouseover bring the route to front
+						bus.on('mouseover', function(e) {
+							e.target.bringToFront();
+						});
+						
 					}
 				})
 			}
@@ -142,6 +162,7 @@
 			var numberFiveBus = getRoute(5);
 			var numberTwentyThreeSBus = getRoute(23);
 			var numberThirtyTwoBus = getRoute(32);
+			var numberThirtyTwoBus = getRoute(75);
 			
 			function getRandomColor() {
 				// hexadecimal starting symbol
