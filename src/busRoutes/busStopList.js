@@ -24,9 +24,18 @@ var locations = [
 				 [56.480319, -3.022696, 16],//Linton Road BUS STOP
 				 [56.471722, -3.016213, 17],//Sharps Court BUS STOP 
 				 [56.464778, -3.026638, 18],//The Shand BUS STOP
-				 [56.456497, -3.009936, 19] //Harris Academy Perth Road BUS STOP.
-    			];
-    			
+				 [56.456497, -3.009936, 19],//Harris Academy Perth Road BUS STOP.
+    		
+				
+				//Route 75
+				[56.459985, -2.970808, 20],//City Centre, High Street (Stop 3)
+				[56.463849, -2.964979, 21],//City Centre, Bus Station
+				[56.469494, -2.894323, 22],//West Ferry/Broughty Ferry, Ogilvie Court
+				[56.468344, -2.875823, 23],//Broughty Ferry, Library
+				[56.481033, -2.836319, 24],//Monifieth, Grange Primary School
+				[56.490562, -2.837750, 26]//Ethiebeaton Park, Dobbie's Garden Centre
+				];
+				
 var locationBusStations = [
       			[ 56.4631, -2.966], // Seagate
     			];
