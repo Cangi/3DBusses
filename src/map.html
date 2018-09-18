@@ -41,25 +41,36 @@
 			var stationsArray = []
 			
 			//Open schedule when a bus stop/station is clicked
-			function newWindow() {
+			function newWindow(value) {
 			
 				var myWindow;
     			var width = 400;
     			var height = 300;
     			var left = parseInt((screen.availWidth/2) - (width/2));
     			var top = parseInt((screen.availHeight/2) - (height/2));
-    			var windowFeatures = "width=" + width + ",height=" + height + ",status,resizable,left=" + left + ",top=" + top;
-    				
-				myWindow = window.open("", "", windowFeatures);
+    			var windowFeatures = "width=" + width + ",height=" + height + ",status,resizable,left=" + left + ",top=" + top + ",location = no";
+    			
+				
+				myWindow = window.open("", "mywindow", windowFeatures);
+				setTimeout(function(){
+				myWindow.document.title = 'Bus schdule' ;
+				}, 10) ;//open() and title() is asynchronous
 				var txt = "schedule";
 				myWindow.document.write("<center>" + txt.fontsize(6) + "</center>");
+<<<<<<< HEAD
+				myWindow.document.write (locations[value][2]);
 			
+=======
+			    //document.write("<p>Fontcolor: " + txt.fontcolor("green") + "</p>");//change the color
+				//document.write("<p>Link: " + txt.link("https://www.w3schools.com") + "</p>");//add a link
+>>>>>>> b0b6f2158c2d7b0047f39fb4879d0abd78e5566f
 			}
 			//Add bus stops
 			for (i = 0; i < locations.length; i++) {  
-				
-				var stops = L.marker([locations[i][0], locations[i][1]], {icon: stop1}).on('click', function() {newWindow()});
-				
+				var x = i
+				//var stops = L.marker([locations[i][0], locations[i][1]], {icon: stop1}).on('click', function() {newWindow(x)});
+				var stops = L.marker([locations[i][0], locations[i][1]], {icon: stop1}).on('click', L.bind(newWindow, null, x));
+				console.log(x)
 				stopsArray[i] = stops
 		
       		};
@@ -166,7 +177,14 @@
                 color += letters[Math.floor(Math.random() * letters.length)];
 				return color;
 			}
+<<<<<<< HEAD
+//<<<<<<< HEAD
+//=======
 
+//>>>>>>> 7f94c2e08e3f67dfdf0238980c1e795da6e812d5
+=======
+
+>>>>>>> b0b6f2158c2d7b0047f39fb4879d0abd78e5566f
 			
 			</script>		
 		</div>
