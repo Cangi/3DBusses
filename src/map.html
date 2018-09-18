@@ -151,7 +151,48 @@
 				return color;
 			}
 
+			//placeholder bus trigger marker
+			var trigger = L.marker([56.45487, -2.96654], { title: "first" }).addTo(map);
 			
+			//bus icon
+			var myIcon = L.icon({
+				iconUrl: 'leftTransparent.png',
+				iconSize: [100, 100],
+				iconAnchor: [50, 50],
+			});
+			
+			//longitude/altitude finder
+			/*map.on("click", function (e) {
+				pixelPosition = e.layerPoint;
+				latLng = map.layerPointToLatLng(pixelPosition);
+				alert("Pixel position = " + pixelPosition + "\nLatLng = " + latLng);
+			});*/
+			
+			//bus movement control function
+			trigger.on('click', function (evt) {
+				$.get({
+					url: "/getBusStops",
+					data: { busNumber: '1' },
+					success: function (json) {
+						busMove(json[0].route);
+					}
+				})
+			});
+			
+			//bus movement logic
+			function busMove(positionArray) {
+				var position = positionArray[0];
+				var bus = L.marker(position, { icon: myIcon }).addTo(map);
+				var i = 0;
+				setInterval(() => {
+					i++;
+					if(i < positionArray.length) {
+						bus.setLatLng(positionArray[i]).update();
+					} else {
+						return;
+					}
+				}, 500); //moves every half a second/500 milliseconds
+			}
 			</script>		
 		</div>
 	</div>
