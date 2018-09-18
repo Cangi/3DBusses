@@ -30,12 +30,14 @@ var locations = [
 				 [56.456497, -3.009936, 19, "23S"], //Harris Academy Perth Road BUS STOP.
     		
 				//Route 75
-				[56.459985, -2.970808, 20],//City Centre, High Street (Stop 3)
-				[56.463849, -2.964979, 21],//City Centre, Bus Station
-				[56.469494, -2.894323, 22],//West Ferry/Broughty Ferry, Ogilvie Court
-				[56.468344, -2.875823, 23],//Broughty Ferry, Library
-				[56.481033, -2.836319, 24],//Monifieth, Grange Primary School
-				[56.490562, -2.837750, 26]//Ethiebeaton Park, Dobbie's Garden Centre
+				[56.459985, -2.970808, 20, "75"],//City Centre, High Street (Stop 3)
+				[56.463849, -2.964979, 21, "75"],//City Centre, Bus Station
+				[56.466819, -2.949562, 22, "75"],
+				[56.469494, -2.894323, 23, "75"],//West Ferry/Broughty Ferry, Ogilvie Court
+				[56.468344, -2.875823, 24, "75"],//Broughty Ferry, Library
+				[56.474710, -2.843661, 25, "75"],
+				[56.481878, -2.834049, 26, "75"],//Monifieth, Grange Primary School
+				[56.490684, -2.833479, 27, "75"]//Ethiebeaton Park, Dobbie's Garden Centre
 				];
 				
 
