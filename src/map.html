@@ -58,11 +58,15 @@
 				
 				var txt = "schedule";
 				myWindow.document.write("<center>" + txt.fontsize(6) + "</center>");
+<<<<<<< HEAD
 
 				myWindow.document.write ("Bus stop nº: " + locations[value][2] + "<br></br>");
 				
 				myWindow.document.write ("This is route " + locations[value][3]);
 			
+=======
+				myWindow.document.write(locations[value][2]);
+>>>>>>> 34f0f83a00a5ad140ab4e22acae6f4d025007507
 			}
 			//Add bus stops
 			for (i = 0; i < locations.length; i++) {  
@@ -118,7 +122,22 @@
             		map.addLayer(stationMarkers);
         			}
 			});
-						
+			
+			//create a feature group for routes
+			var routeFeatureGroup = new L.FeatureGroup();
+			//add all routes to map via layer
+      		map.addLayer(routeFeatureGroup);
+			//on zoomout varible <13, remove from map
+      		map.on('zoomend', function() {
+    			if (map.getZoom() < 13){
+            		map.removeLayer(routeFeatureGroup);
+    				}
+    				else {
+            		map.addLayer(routeFeatureGroup);
+        			}
+			});
+      			
+			//function which creates a route for a specific bus X
 			function getRoute(x)
 			{
 				var busNumber = x;
@@ -127,16 +146,21 @@
 					data : {busNumber : x},
 					success : function(json) {
 						routes[x] = json[0].route;				
-						var bus = L.polyline(routes[x], {color: getRandomColor(), className: 'BusOptions'}).addTo(map);
-						
+						//create the polyline
+						var bus = L.polyline(routes[x], {color: getRandomColor(), className: 'BusOptions'});
+						//add this route to the route group
+						routeFeatureGroup.addLayer(bus);
+						//event handler for onclick event
 						function OnBusClick() {
 							alert("This is route : " + x);
 						}
 						bus.on('click', L.bind(OnBusClick, null, x));
 						
-										
-				
-		
+						//on mouseover bring the route to front
+						bus.on('mouseover', function(e) {
+							e.target.bringToFront();
+						});
+						
 					}
 				})
 			}
@@ -147,6 +171,7 @@
 			var numberFiveBus = getRoute(5);
 			var numberTwentyThreeSBus = getRoute(23);
 			var numberThirtyTwoBus = getRoute(32);
+			var numberThirtyTwoBus = getRoute(75);
 			
 			function getRandomColor() {
 				// hexadecimal starting symbol
@@ -155,6 +180,11 @@
                 color += letters[Math.floor(Math.random() * letters.length)];
 				return color;
 			}
+<<<<<<< HEAD
+=======
+
+			
+>>>>>>> 34f0f83a00a5ad140ab4e22acae6f4d025007507
 			</script>		
 		</div>
 	</div>
