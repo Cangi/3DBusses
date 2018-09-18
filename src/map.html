@@ -54,21 +54,19 @@
 				myWindow = window.open("", "mywindow", windowFeatures);
 				setTimeout(function(){
 				myWindow.document.title = 'Bus schdule' ;
-				}, 10) ;//open() and title() is asynchronous
+				}, 10);//open() and title() is asynchronous
+				
 				var txt = "schedule";
 				myWindow.document.write("<center>" + txt.fontsize(6) + "</center>");
-<<<<<<< HEAD
-				myWindow.document.write (locations[value][2]);
+
+				myWindow.document.write ("Bus stop nº: " + locations[value][2] + "<br></br>");
+				
+				myWindow.document.write ("This is route " + locations[value][3]);
 			
-=======
-			    //document.write("<p>Fontcolor: " + txt.fontcolor("green") + "</p>");//change the color
-				//document.write("<p>Link: " + txt.link("https://www.w3schools.com") + "</p>");//add a link
->>>>>>> b0b6f2158c2d7b0047f39fb4879d0abd78e5566f
 			}
 			//Add bus stops
 			for (i = 0; i < locations.length; i++) {  
 				var x = i
-				//var stops = L.marker([locations[i][0], locations[i][1]], {icon: stop1}).on('click', function() {newWindow(x)});
 				var stops = L.marker([locations[i][0], locations[i][1]], {icon: stop1}).on('click', L.bind(newWindow, null, x));
 				console.log(x)
 				stopsArray[i] = stops
@@ -77,9 +75,10 @@
       		
       		//Add bus stations
       		for (i = 0; i < locationBusStations.length; i++) {  
-	
-        		var stations = L.marker([locationBusStations[i][0], locationBusStations[i][1]], {icon: stopBusStation}).on('click', function(){newWindow()});
+				var z = i
+        		var stations = L.marker([locationBusStations[i][0], locationBusStations[i][1]], {icon: stopBusStation}).on('click', L.bind(newWindow, null, z));
         		stationsArray[i] = stations
+        		
       		};
       		
       		//Hide  bus stops markers when zoomed out
@@ -156,15 +155,6 @@
                 color += letters[Math.floor(Math.random() * letters.length)];
 				return color;
 			}
-<<<<<<< HEAD
-//<<<<<<< HEAD
-//=======
-
-//>>>>>>> 7f94c2e08e3f67dfdf0238980c1e795da6e812d5
-=======
-
->>>>>>> b0b6f2158c2d7b0047f39fb4879d0abd78e5566f
-			
 			</script>		
 		</div>
 	</div>
