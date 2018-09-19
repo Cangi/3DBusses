@@ -1,172 +1,173 @@
 <html>
+
 <head>
-<script src="https://cdn-webgl.wrld3d.com/wrldjs/dist/latest/wrld.js"></script>
-<script src="busRoutes.js"></script>
-<script src="busStopList.js"></script>
-<script src="https://code.jquery.com/jquery-3.3.1.js" integrity="sha256-2Kok7MbOyxpgUVvAk/HJ2jigOSYS2auK4Pfzbm7uH60=" crossorigin="anonymous"></script>
-<link href="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.0.1/leaflet.css" rel="stylesheet" />
-<link rel="stylesheet" href="testcss.css">
+	<script src="https://cdn-webgl.wrld3d.com/wrldjs/dist/latest/wrld.js"></script>
+	<script src="busRoutes.js"></script>
+	<script src="busStopList.js"></script>
+	<script src="https://code.jquery.com/jquery-3.3.1.js" integrity="sha256-2Kok7MbOyxpgUVvAk/HJ2jigOSYS2auK4Pfzbm7uH60=" crossorigin="anonymous"></script>
+	<link href="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.0.1/leaflet.css" rel="stylesheet" />
+	<link rel="stylesheet" href="testcss.css">
 </head>
+
 <body>
 
 	<div style="position: relative">
-		<div id="map" style="height: 100%"></div>		
-			<script>
+		<div id="map" style="height: 100%"></div>
+		<script>
 			let routes = {};
 
 			//create map 
-			var map = L.Wrld.map("map", "c976700dbe05df6d18bdab38af2b1ae2", {center: [56.458522, -2.97107], zoom: 15});
-						
+			var map = L.Wrld.map("map", "c976700dbe05df6d18bdab38af2b1ae2", { center: [56.458522, -2.97107], zoom: 15 });
+
 			// create custom icon
-    		var BusStop = L.Icon.extend({
-    		options: {
-        		iconSize:     [75, 75],
-        		iconAnchor:   [32.5, 75],
-        		popupAnchor:  [-3, -76]
-    			}
+			var BusStop = L.Icon.extend({
+				options: {
+					iconSize: [75, 75],
+					iconAnchor: [32.5, 75],
+					popupAnchor: [-3, -76]
+				}
 			});
 
 			//links to images used for stops
 			var linkBusStop = 'https://cdn.iconscout.com/icon/premium/png-512-thumb/bus-stop-10-660162.png'
 			var linkBusStation = 'https://cdn2.iconfinder.com/data/icons/large-home-icons/512/Bus_station_transportation_space.png'
-			var stop1 = new BusStop({iconUrl: linkBusStop});
-			var stopBusStation = new BusStop({iconUrl: linkBusStation});
-    
-    		L.icon = function (options) {
-    			return new L.Icon(options);
+			var stop1 = new BusStop({ iconUrl: linkBusStop });
+			var stopBusStation = new BusStop({ iconUrl: linkBusStation });
+
+			L.icon = function (options) {
+				return new L.Icon(options);
 			};
-			
+
 			var stopsArray = []
 			var stationsArray = []
-			
+
 			//Open schedule when a bus stop/station is clicked
 			function newWindow() {
-			
+
 				var myWindow;
-    			var width = 400;
-    			var height = 300;
-    			var left = parseInt((screen.availWidth/2) - (width/2));
-    			var top = parseInt((screen.availHeight/2) - (height/2));
-    			var windowFeatures = "width=" + width + ",height=" + height + ",status,resizable,left=" + left + ",top=" + top + ",location = no";
-    			
-				
+				var width = 400;
+				var height = 300;
+				var left = parseInt((screen.availWidth / 2) - (width / 2));
+				var top = parseInt((screen.availHeight / 2) - (height / 2));
+				var windowFeatures = "width=" + width + ",height=" + height + ",status,resizable,left=" + left + ",top=" + top + ",location = no";
+
+
 				myWindow = window.open("", "mywindow", windowFeatures);
-				setTimeout(function(){
-				myWindow.document.title = 'Bus schdule' ;
-				}, 10) ;//open() and title() is asynchronous
+				setTimeout(function () {
+					myWindow.document.title = 'Bus schdule';
+				}, 10);//open() and title() is asynchronous
 				var txt = "schedule";
 				myWindow.document.write("<center>" + txt.fontsize(6) + "</center>");
-			    //document.write("<p>Fontcolor: " + txt.fontcolor("green") + "</p>");//change the color
+				//document.write("<p>Fontcolor: " + txt.fontcolor("green") + "</p>");//change the color
 				//document.write("<p>Link: " + txt.link("https://www.w3schools.com") + "</p>");//add a link
 			}
 			//Add bus stops
-			for (i = 0; i < locations.length; i++) {  
-				
-				var stops = L.marker([locations[i][0], locations[i][1]], {icon: stop1}).on('click', function() {newWindow()});
-				
+			for (i = 0; i < locations.length; i++) {
+
+				var stops = L.marker([locations[i][0], locations[i][1]], { icon: stop1 }).on('click', function () { newWindow() });
+
 				stopsArray[i] = stops
-		
-      		};
-      		
-      		//Add bus stations
-      		for (i = 0; i < locationBusStations.length; i++) {  
-	
-        		var stations = L.marker([locationBusStations[i][0], locationBusStations[i][1]], {icon: stopBusStation}).on('click', function(){newWindow()});
-        		stationsArray[i] = stations
-      		};
-      		
-      		//Hide  bus stops markers when zoomed out
-      		var stopMarkers = new L.FeatureGroup();
-      		
-      		for (i = 0; i < locations.length; i++) {
-      		
-      			stopMarkers.addLayer(stopsArray[i]);
+
+			};
+
+			//Add bus stations
+			for (i = 0; i < locationBusStations.length; i++) {
+
+				var stations = L.marker([locationBusStations[i][0], locationBusStations[i][1]], { icon: stopBusStation }).on('click', function () { newWindow() });
+				stationsArray[i] = stations
+			};
+
+			//Hide  bus stops markers when zoomed out
+			var stopMarkers = new L.FeatureGroup();
+
+			for (i = 0; i < locations.length; i++) {
+
+				stopMarkers.addLayer(stopsArray[i]);
 			}
-			   
-      		 // Add markers the first time the page is loaded
-      		map.addLayer(stopMarkers);
-      		map.on('zoomend', function() {
-    			if (map.getZoom() < 14){
-            		map.removeLayer(stopMarkers);
-    				}
-    				else {
-            		map.addLayer(stopMarkers);
-        			}
+
+			// Add markers the first time the page is loaded
+			map.addLayer(stopMarkers);
+			map.on('zoomend', function () {
+				if (map.getZoom() < 14) {
+					map.removeLayer(stopMarkers);
+				}
+				else {
+					map.addLayer(stopMarkers);
+				}
 			});
-			
+
 			//Hide  bus stations markers when zoomed out
 			var stationMarkers = new L.FeatureGroup();
-      		
-      		for (i = 0; i < locationBusStations.length; i++) {
-      		
-      			stationMarkers.addLayer(stationsArray[i]);
-      		}
-			   
+
+			for (i = 0; i < locationBusStations.length; i++) {
+
+				stationMarkers.addLayer(stationsArray[i]);
+			}
+
 			// Add markers the first time the page is loaded
-      		map.addLayer(stationMarkers);
-      		map.on('zoomend', function() {
-    			if (map.getZoom() < 14){
-            		map.removeLayer(stationMarkers);
-    				}
-    				else {
-            		map.addLayer(stationMarkers);
-        			}
+			map.addLayer(stationMarkers);
+			map.on('zoomend', function () {
+				if (map.getZoom() < 14) {
+					map.removeLayer(stationMarkers);
+				}
+				else {
+					map.addLayer(stationMarkers);
+				}
 			});
-						
-			function getRoute(x)
-			{
+
+			function getRoute(x) {
 				var busNumber = x;
 				$.get({
 					url: "/getBusStops",
-					data : {busNumber : x},
-					success : function(json) {
-						routes[x] = json[0].route;				
-						var bus = L.polyline(routes[x], {color: getRandomColor(), className: 'BusOptions'}).addTo(map);
-						
+					data: { busNumber: x },
+					success: function (json) {
+						routes[x] = json[0].route;
+						var bus = L.polyline(routes[x], { color: getRandomColor(), className: 'BusOptions' }).addTo(map);
+
 						function OnBusClick() {
 							alert("This is route : " + x);
 						}
 						bus.on('click', L.bind(OnBusClick, null, x));
-						
-										
-				
-		
+
+
+
+
 					}
 				})
 			}
-			
+
 			//creates each route
 			var numberOneBus = getRoute(1);
 			var numberFourBus = getRoute(4);
 			var numberFiveBus = getRoute(5);
 			var numberTwentyThreeSBus = getRoute(23);
 			var numberThirtyTwoBus = getRoute(32);
-			
+
 			function getRandomColor() {
 				// hexadecimal starting symbol
-				var color = '#'; 
-                var letters = ['ef0b0b','ef670b','1bc415','26e2c0','9c73dd','ff1c63', '291A6D', '3B552E', '922C2C', '82244D', 'B62222', '2B781F', '85B87D', 'E9E43D', 'DD832F', '9F7676', '1D2FB2', 'efd809', '00705d', '004570', '310449', 'b7005b']; //Set your colors here
-                color += letters[Math.floor(Math.random() * letters.length)];
+				var color = '#';
+				var letters = ['ef0b0b', 'ef670b', '1bc415', '26e2c0', '9c73dd', 'ff1c63', '291A6D', '3B552E', '922C2C', '82244D', 'B62222', '2B781F', '85B87D', 'E9E43D', 'DD832F', '9F7676', '1D2FB2', 'efd809', '00705d', '004570', '310449', 'b7005b']; //Set your colors here
+				color += letters[Math.floor(Math.random() * letters.length)];
 				return color;
 			}
 
 			//placeholder bus trigger marker
-			var trigger = L.marker([56.45487, -2.96654], { title: "first" }).addTo(map);
-			
+			var trigger = L.marker([56.46135, -2.97943], { title: "first" }).addTo(map);
+
 			//bus icon
 			var myIcon = L.icon({
 				iconUrl: 'leftTransparent.png',
 				iconSize: [100, 100],
 				iconAnchor: [50, 50],
 			});
-			
+
 			//longitude/altitude finder
-			map.on("click", function (e) {
+			/*map.on("click", function (e) {
 				pixelPosition = e.layerPoint;
 				latLng = map.layerPointToLatLng(pixelPosition);
 				alert("Pixel position = " + pixelPosition + "\nLatLng = " + latLng);
-			});
-			
+			});*/
+
 			//bus movement control function
 			trigger.on('click', function (evt) {
 				$.get({
@@ -177,23 +178,80 @@
 					}
 				})
 			});
-			
+
 			//bus movement logic
 			function busMove(positionArray) {
 				var position = positionArray[0];
 				var bus = L.marker(position, { icon: myIcon }).addTo(map);
 				var i = 0;
+				var j = 0;
 				setInterval(() => {
 					i++;
-					if(i < positionArray.length) {
-						bus.setLatLng(positionArray[i]).update();
+					if (i < positionArray.length) {
+						//bus.setLatLng(positionArray[i]).update();
+						var intervals = calculateBusMovement(positionArray[i - 1], positionArray[i]);
+						console.log(intervals);
+						j++;
+						if(j < intervals.length) {
+							bus.setLatLng(intervals[j]).update();
+							console.log("bus moved to " + intervals[j]);
+						}
+						//console.log("DONE******");
 					} else {
 						return;
 					}
 				}, 500); //moves every half a second/500 milliseconds
 			}
-			</script>		
-		</div>
+
+			function calculateBusMovement(positionOld, positionNew) {
+				//console.log("old position " + positionOld);
+				//console.log("new position " + positionNew);
+				var xOld = positionOld[0];
+				var xNew = positionNew[0];
+				var yOld = positionOld[1];
+				var yNew = positionNew[1];
+				//var distance = Math.sqrt(Math.pow(xNew - xOld, 2) + Math.pow(yNew - yOld, 2));
+				//console.log("distance is " + distance);
+				var xDistance = xNew - xOld;
+				var yDistance = yNew - yOld;
+				var numberOfIntervals = 5;
+				var xStep = xDistance / numberOfIntervals;
+				var yStep = yDistance / numberOfIntervals;
+				/*if(directionCalculator(positionOld[0], positionNew[0], xStep)){
+					
+				}*/
+				//console.log("length of steps X: " + xStep + " and Y: " + yStep);
+				//var step = distance / numberOfIntervals;
+				//console.log("length of steps " + step);
+				var arrayPositionSteps = [];
+				var positionOldCopy = positionOld;
+				for (var i = 0; i < numberOfIntervals + 1; i++) {
+					xPosition = positionOldCopy[0];
+					yPosition = positionOldCopy[1];
+					if(i === numberOfIntervals) {
+						//console.log("last step");
+						arrayPositionSteps[i] = positionNew;
+					} else {
+						arrayPositionSteps[i] = [xPosition + xStep, yPosition + yStep];
+					}
+					//console.log("new array value " + arrayPositionSteps[i]);
+					positionOldCopy = arrayPositionSteps[i];
+				}
+				return arrayPositionSteps;
+			}
+
+			function directionCalculator(positionOld, positionNew) {
+				var difference = positionNew - positionOld;
+				if(difference > 0){
+					return true;
+				}
+				else {
+					return false;
+				}
+			}
+		</script>
+	</div>
 	</div>
 </body>
+
 </html>
