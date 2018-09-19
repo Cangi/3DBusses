@@ -57,7 +57,7 @@
 				}, 10);//open() and title() is asynchronous
 				
 				var txt = "schedule";
-				myWindow.document.write("<center>" + txt.fontsize(6) + "</center>");
+				myWindow.document.write("<center>" + txt.fontsize(6) + "</center>" + "<br></br>");
 				
 				if (value < 100) { // Distinguish better a bus stop and a bus station
 				
@@ -78,7 +78,6 @@
 			for (i = 0; i < locations.length; i++) {  
 				var x = i
 				var stops = L.marker([locations[i][0], locations[i][1]], {icon: stop1}).on('click', L.bind(newWindow, null, x));
-				console.log(x)
 				stopsArray[i] = stops
 		
       		};
