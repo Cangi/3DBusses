@@ -46,12 +46,22 @@ var locations = [
 				[56.473345, -3.011184, 29, 4, "Lochee Bank Street"],
 				[56.477685, -3.017801, 30, 4, "Park Hotel"],
 				[56.480307, -3.022678, 31, 4, "Dryburgh - Linton Road"],	
+				
+				//Route 99
+				//[56.463175, -2.966242, 32, 99, " Bus Station"],
+				[56.414975, -2.917560, 32, 99, "Drumoig, National Golf Centre"],
+				[56.394394, -2.905977, 33, 99, "St Michaels, St Andrews Road"],
+				[56.388970, -2.890042, 34, 99, "Leuchars, Castle Farm Road End"],
+				[56.375955, -2.892332, 35, 99, "Leuchars, Railway Station"],
+				[56.361661, -2.891534, 36, 99, "Guardbridge, Innerbridge Street"],	
+				[56.339288, -2.796436, 37, 99, "St Andrews, Bus Station"]
 				];
 				
 
 var locationBusStations = [
       			
       			[56.463849, -2.964979, 1, 75, "City Centre Bus Station"],
+				[56.463175, -2.966242, 2, 99, "City Centre Bus Station"],
     			];
 
    
