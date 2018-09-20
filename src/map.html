@@ -213,20 +213,32 @@
 			}
 
 			function calculateBusAnimationPosition(positionOld, positionNew) {
-				var xOld = positionOld[0];
-				var xNew = positionNew[0];
-				var yOld = positionOld[1];
-				var yNew = positionNew[1];
-				var xDistance = xNew - xOld;
-				var yDistance = yNew - yOld;
-				var xStep = xDistance / animationFrames;
-				var yStep = yDistance / animationFrames;
+				var xDistance = positionNew[0] - positionOld[0];
+				var yDistance = positionNew[1] - positionOld[1];
+				console.log("x distance: " + xDistance + " y distance: " + yDistance);
+				var animationFramesTemp = animationFrames;
+				//biggest ones
+				if(xDistance < -0.002 || xDistance > 0.002 || yDistance < -0.002 || yDistance > 0.002){
+					var bus = L.marker(positionNew).addTo(map);
+					animationFramesTemp += 10; //CAUSING FRAME SKIPS, SOMETHING IS WRONG, MORE NEEDS TO BE CHANGED
+					var xStep = xDistance / animationFramesTemp;
+					var yStep = yDistance / animationFramesTemp;
+				//normal size
+				} else if(xDistance < -0.0005 || xDistance > 0.0005 || yDistance < -0.0005 || yDistance > 0.0005) {
+					var xStep = xDistance / animationFramesTemp;
+					var yStep = yDistance / animationFramesTemp;
+				//smallest ones
+				} else {
+					//var bus = L.marker(positionNew, {opacity: 0.5}).addTo(map);
+					var xStep = xDistance / animationFramesTemp;
+					var yStep = yDistance / animationFramesTemp;
+				}
 				var arrayPositionSteps = [];
 				var positionOldCopy = positionOld;
-				for (var i = 0; i < animationFrames + 1; i++) {
+				for (var i = 0; i < animationFramesTemp + 1; i++) {
 					xPosition = positionOldCopy[0];
 					yPosition = positionOldCopy[1];
-					if (i === animationFrames) {
+					if (i === animationFramesTemp) {
 						arrayPositionSteps[i] = positionNew;
 					} else if (i === 0) {
 						arrayPositionSteps[i] = positionOldCopy;
