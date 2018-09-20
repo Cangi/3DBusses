@@ -179,99 +179,63 @@
 				})
 			});
 
-			//bus movement logic
+			//bus speed and framerate settings
+			var busSpeed = 2000; //milliseconds between each route point
+			var animationFrames = 10; //number of busses between each route point
+
 			function busMove(positionArray) {
 				var position = positionArray[0];
 				var bus = L.marker(position, { icon: myIcon }).addTo(map);
 				var i = 0;
 				var j = 0;
-				for (var i = 0; i < positionArray.length; i++) {
-					console.log("i: " + i);
-					if (i === 0) {
-
-					} else {
-						var intervals = calculateBusMovement(positionArray[i - 1], positionArray[i]);
-						setInterval(() => {
-							j++;
-							console.log("j: " + j);
-							if (j < intervals.length) {
-								bus.setLatLng(intervals[j]).update();
-								console.log("bus moved to " + intervals[j]);
-							}
-							//console.log("DONE******");
-							else {
-								return;
-							}
-						}, 500); //moves every half a second/500 milliseconds
-					}
-				}
-
-				/*setInterval(() => {
+				var test = setInterval(() => {
 					i++;
-					if (i < positionArray.length) {
-						//bus.setLatLng(positionArray[i]).update();
-						var intervals = calculateBusMovement(positionArray[i - 1], positionArray[i]);
-						//console.log(intervals);
-						j++;
-						if (j < intervals.length) {
-							bus.setLatLng(intervals[j]).update();
-							console.log("bus moved to " + intervals[j]);
-						}
-						//console.log("DONE******");
+					if (i !== 0 && i < positionArray.length) {
+						var intervals = calculateBusAnimationPosition(positionArray[i - 1], positionArray[i]);
+						executeBusMoveWithAnimation(bus, intervals);
 					} else {
-						return;
+						clearInterval(test);
 					}
-				}, 500); //moves every half a second/500 milliseconds*/
+				}, busSpeed); //timer speed
 			}
 
-			function calculateBusMovement(positionOld, positionNew) {
-				//console.log("old position " + positionOld);
-				//console.log("new position " + positionNew);
+			function executeBusMoveWithAnimation(bus, intervals) {
+				var j = 0;
+				var refreshId = setInterval(() => {
+					j++;
+					if (j < intervals.length) {
+						bus.setLatLng(intervals[j]).update();
+					}
+					else {
+						clearInterval(refreshId);
+					}
+				}, busSpeed / animationFrames); //timer speed
+			}
+
+			function calculateBusAnimationPosition(positionOld, positionNew) {
 				var xOld = positionOld[0];
 				var xNew = positionNew[0];
 				var yOld = positionOld[1];
 				var yNew = positionNew[1];
-				//var distance = Math.sqrt(Math.pow(xNew - xOld, 2) + Math.pow(yNew - yOld, 2));
-				//console.log("distance is " + distance);
 				var xDistance = xNew - xOld;
 				var yDistance = yNew - yOld;
-				var numberOfIntervals = 5;
-				var xStep = xDistance / numberOfIntervals;
-				var yStep = yDistance / numberOfIntervals;
-				/*if(directionCalculator(positionOld[0], positionNew[0], xStep)){
-					
-				}*/
-				//console.log("length of steps X: " + xStep + " and Y: " + yStep);
-				//var step = distance / numberOfIntervals;
-				//console.log("length of steps " + step);
+				var xStep = xDistance / animationFrames;
+				var yStep = yDistance / animationFrames;
 				var arrayPositionSteps = [];
 				var positionOldCopy = positionOld;
-				//console.log("old position: " + positionOld)
-				for (var i = 0; i < numberOfIntervals + 1; i++) {
+				for (var i = 0; i < animationFrames + 1; i++) {
 					xPosition = positionOldCopy[0];
 					yPosition = positionOldCopy[1];
-					if (i === numberOfIntervals) {
-						//console.log("last step");
+					if (i === animationFrames) {
 						arrayPositionSteps[i] = positionNew;
 					} else if (i === 0) {
 						arrayPositionSteps[i] = positionOldCopy;
 					} else {
 						arrayPositionSteps[i] = [xPosition + xStep, yPosition + yStep];
 					}
-					//console.log("new array value " + arrayPositionSteps[i]);
 					positionOldCopy = arrayPositionSteps[i];
 				}
 				return arrayPositionSteps;
-			}
-
-			function directionCalculator(positionOld, positionNew) {
-				var difference = positionNew - positionOld;
-				if (difference > 0) {
-					return true;
-				}
-				else {
-					return false;
-				}
 			}
 		</script>
 	</div>
