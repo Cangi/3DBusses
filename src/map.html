@@ -185,14 +185,35 @@
 				var bus = L.marker(position, { icon: myIcon }).addTo(map);
 				var i = 0;
 				var j = 0;
-				setInterval(() => {
+				for (var i = 0; i < positionArray.length; i++) {
+					console.log("i: " + i);
+					if (i === 0) {
+
+					} else {
+						var intervals = calculateBusMovement(positionArray[i - 1], positionArray[i]);
+						setInterval(() => {
+							j++;
+							console.log("j: " + j);
+							if (j < intervals.length) {
+								bus.setLatLng(intervals[j]).update();
+								console.log("bus moved to " + intervals[j]);
+							}
+							//console.log("DONE******");
+							else {
+								return;
+							}
+						}, 500); //moves every half a second/500 milliseconds
+					}
+				}
+
+				/*setInterval(() => {
 					i++;
 					if (i < positionArray.length) {
 						//bus.setLatLng(positionArray[i]).update();
 						var intervals = calculateBusMovement(positionArray[i - 1], positionArray[i]);
-						console.log(intervals);
+						//console.log(intervals);
 						j++;
-						if(j < intervals.length) {
+						if (j < intervals.length) {
 							bus.setLatLng(intervals[j]).update();
 							console.log("bus moved to " + intervals[j]);
 						}
@@ -200,7 +221,7 @@
 					} else {
 						return;
 					}
-				}, 500); //moves every half a second/500 milliseconds
+				}, 500); //moves every half a second/500 milliseconds*/
 			}
 
 			function calculateBusMovement(positionOld, positionNew) {
@@ -225,12 +246,15 @@
 				//console.log("length of steps " + step);
 				var arrayPositionSteps = [];
 				var positionOldCopy = positionOld;
+				//console.log("old position: " + positionOld)
 				for (var i = 0; i < numberOfIntervals + 1; i++) {
 					xPosition = positionOldCopy[0];
 					yPosition = positionOldCopy[1];
-					if(i === numberOfIntervals) {
+					if (i === numberOfIntervals) {
 						//console.log("last step");
 						arrayPositionSteps[i] = positionNew;
+					} else if (i === 0) {
+						arrayPositionSteps[i] = positionOldCopy;
 					} else {
 						arrayPositionSteps[i] = [xPosition + xStep, yPosition + yStep];
 					}
@@ -242,7 +266,7 @@
 
 			function directionCalculator(positionOld, positionNew) {
 				var difference = positionNew - positionOld;
-				if(difference > 0){
+				if (difference > 0) {
 					return true;
 				}
 				else {
