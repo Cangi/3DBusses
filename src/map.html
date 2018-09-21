@@ -14,10 +14,51 @@
 	<div style="position: relative">
 		<div id="map" style="height: 100%"></div>
 		<script>
+		
 			let routes = {};
-
-			//create map 
+			//create map
 			var map = L.Wrld.map("map", "c976700dbe05df6d18bdab38af2b1ae2", { center: [56.458522, -2.97107], zoom: 15 });
+			//get location of user
+			getLocation();
+			
+			//fuction to get the location
+			function getLocation() {
+				if (navigator.geolocation) {
+					navigator.geolocation.getCurrentPosition(showPosition);
+				} else {
+					console.log("Geolocation is not supported by this browser.");
+				}
+			}
+			
+			//sets the map view to center around the person and adds marker on their location
+			function showPosition(position) {
+			
+				setTimeout(function() {
+				map.setView([position.coords.latitude, position.coords.longitude], 16, {
+				headingDegrees: 270,
+				animate: true,
+				durationSeconds:10
+				});
+				}, 20000);
+				
+				var locationIcon = L.icon({
+					iconUrl: 'https://static.thenounproject.com/png/12314-200.png',
+					iconSize: [60,50], // size of the icon
+					popupAnchor: [0,-15],
+				});
+				
+				var customPopup = "You Are Here.";
+		
+				// specify popup options 
+				var customOptions =
+				{
+				'maxWidth': '1000',			
+				'className' : 'custom'
+				}
+				
+				var marker = L.marker([position.coords.latitude, position.coords.longitude], {icon: locationIcon}).bindPopup(customPopup,customOptions).addTo(map);
+				console.log("Latitude: " + position.coords.latitude + "<br>Longitude: " + position.coords.longitude); 
+			}
 
 			// create custom icon
 			var BusStop = L.Icon.extend({
