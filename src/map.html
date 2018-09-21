@@ -61,10 +61,11 @@
 				//document.write("<p>Fontcolor: " + txt.fontcolor("green") + "</p>");//change the color
 				//document.write("<p>Link: " + txt.link("https://www.w3schools.com") + "</p>");//add a link
 			}
+
 			//Add bus stops
 			for (i = 0; i < locations.length; i++) {
 
-				var stops = L.marker([locations[i][0], locations[i][1]], { icon: stop1 }).on('click', function () { newWindow() });
+				var stops = L.marker([locations[i][0], locations[i][1]], { icon: stop1}).on('click', function () { newWindow() });
 
 				stopsArray[i] = stops
 
@@ -96,7 +97,7 @@
 				}
 			});
 
-			//Hide  bus stations markers when zoomed out
+			//Hide bus stations markers when zoomed out
 			var stationMarkers = new L.FeatureGroup();
 
 			for (i = 0; i < locationBusStations.length; i++) {
@@ -128,10 +129,6 @@
 							alert("This is route : " + x);
 						}
 						bus.on('click', L.bind(OnBusClick, null, x));
-
-
-
-
 					}
 				})
 			}
@@ -190,11 +187,29 @@
 				})
 			});
 
+			var trigger2 = L.marker([56.46238, -2.97873], { title: "second" }).addTo(map);
+			trigger.on('click', function (evt) {
+				console.log(bus);
+			});
+
+			var busStopsWithTime = 
+			[[[56.46271, -2.97877],0],
+			[[],2],
+			[[],5],
+			[[],11],
+			[[],null],
+			[[],null],
+			[[],null],
+			[[],22],
+			[[],null],
+			[[],33]];
+
 			//bus speed and framerate settings
-			var busSpeed = 3000; //milliseconds between each route point
+			var busSpeed = 8000; //milliseconds between each route point 3000
 			var animationFrames = 40; //number of busses between each route point
 
 			function busMove(positionArray) {
+				console.log(positionArray);
 				var position = positionArray[0];
 				var bus = L.marker(position, { icon: myIcon }).addTo(map);
 				var i = 0;
