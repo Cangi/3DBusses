@@ -140,11 +140,10 @@
 				
 				if (value < 100) { // Distinguish better a bus stop and a bus station
 				
-					myWindow.document.write ("Bus stop nº: " + locations[value][2] + "<br></br>");
+					//myWindow.document.write ("Bus stop nº: " + locations[value][2] + "<br></br>");
 					myWindow.document.write ("This is route " + locations[value][3] + "<br></br>");
 					myWindow.document.write ("Bus stop name: " + locations[value][4] + "<br></br>");
-					var t = (locations[value][3] + ".txt")
-					
+					var t = ("StopsSchedule/" + locations[value][2] + ".txt") //Schedule for every stop
 					leeArchivo(t);
 				}
 				else {
