@@ -3,7 +3,9 @@
 <script src="https://cdn-webgl.wrld3d.com/wrldjs/dist/latest/wrld.js"></script>
 <script src="busRoutes.js"></script>
 <script src="busStopList.js"></script>
+<link href="https://cdn-webgl.wrld3d.com/wrldjs/addons/resources/latest/css/wrld.css" rel="stylesheet"/>
 <script src="https://code.jquery.com/jquery-3.3.1.js" integrity="sha256-2Kok7MbOyxpgUVvAk/HJ2jigOSYS2auK4Pfzbm7uH60=" crossorigin="anonymous"></script>
+<script src="https://cdn-webgl.wrld3d.com/wrldjs/addons/searchbar/latest/searchbar.js"></script>
 <link href="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.0.1/leaflet.css" rel="stylesheet" />
 <link rel="stylesheet" href="testcss.css">
 
@@ -11,6 +13,7 @@
 <body>
 
 	<div style="position: relative">
+		<div id="widget-container" class="wrld-widget-container"></div>
 		<div id="map" style="height: 100%"></div>		
 			<script>
 			let routes = {};
@@ -39,6 +42,10 @@
 			
 			var stopsArray = []
 			var stationsArray = []
+			let busses = [
+				//Remove when Dwayne is ready
+				{title: "Test", location: { latLng: L.latLng(56.458522, -2.97107), zoom: 17, headingDegrees: 235}},
+			];
 			
 			//Open schedule when a bus stop/station is clicked
 			function newWindow(value) {
@@ -195,7 +202,42 @@
 				}
 				return color;
 			}
-			
+			var locationSearchService = {
+        fetchNearbyLocationsByTerm: function(latLng, term, callback) {
+          term = term.trim().toLowerCase();
+          var results = [];
+          if (term.length > 0) {
+            busses.forEach(function(location) {
+              var termPos = location.title.toLowerCase().indexOf(term);
+              if (termPos !== -1) {
+                results.push(Object.assign({}, location, { distSqr: calculateDistSqr(latLng, location.location.latLng) }));
+              }
+            });
+          }
+          results.sort(function(lhs, rhs) { return lhs.distSqr - rhs.distSqr; });
+          callback(results);
+        },
+
+        fetchAutocompleteOptions: function(latLng, term, callback) {
+          term = term.trim().toLowerCase();
+          var options = [];
+          if (term.length > 0) {
+            busses.forEach(function(location) {
+              var termPos = location.title.toLowerCase().indexOf(term);
+              if (termPos !== -1) {
+                options.push(Object.assign({}, location, { pos: termPos }));
+              }
+            });
+          }
+          options.sort(function(lhs, rhs) { return lhs.pos - rhs.pos; });
+          callback(options);
+        }
+      }
+
+      var searchbarConfig = {
+        locationSearchService: locationSearchService
+      };
+      var searchbar = new WrldSearchbar("widget-container", map, searchbarConfig);
 			</script>		
 		</div>
 	</div>
