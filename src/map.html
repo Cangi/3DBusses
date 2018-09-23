@@ -9,174 +9,189 @@
 <link href="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.0.1/leaflet.css" rel="stylesheet" />
 <link rel="stylesheet" href="testcss.css">
 
+
+<head>
+	<script src="https://cdn-webgl.wrld3d.com/wrldjs/dist/latest/wrld.js"></script>
+	<script src="busRoutes.js"></script>
+	<script src="busStopList.js"></script>
+	<script src="https://code.jquery.com/jquery-3.3.1.js" integrity="sha256-2Kok7MbOyxpgUVvAk/HJ2jigOSYS2auK4Pfzbm7uH60=" crossorigin="anonymous"></script>
+	<link href="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.0.1/leaflet.css" rel="stylesheet" />
+	<link rel="stylesheet" href="testcss.css">
 </head>
+
 <body>
 
 	<div style="position: relative">
 		<div id="widget-container" class="wrld-widget-container"></div>
 		<div id="map" style="height: 100%"></div>		
 			<script>
-			let routes = {};
 
-			//create map 
-			var map = L.Wrld.map("map", "c976700dbe05df6d18bdab38af2b1ae2", {center: [56.458522, -2.97107], zoom: 15});
-						
+			let routes = {};
+			//create map
+			var map = L.Wrld.map("map", "c976700dbe05df6d18bdab38af2b1ae2", { center: [56.458522, -2.97107], zoom: 15 });
+			//get location of user
+			getLocation();
+			
+			//fuction to get the location
+			function getLocation() {
+				if (navigator.geolocation) {
+					navigator.geolocation.getCurrentPosition(showPosition);
+				} else {
+					console.log("Geolocation is not supported by this browser.");
+				}
+			}
+			
+			//sets the map view to center around the person and adds marker on their location
+			function showPosition(position) {
+			
+				setTimeout(function() {
+				map.setView([position.coords.latitude, position.coords.longitude], 16, {
+				headingDegrees: 270,
+				animate: true,
+				durationSeconds:10
+				});
+				}, 20000);
+				
+				var locationIcon = L.icon({
+					iconUrl: 'https://static.thenounproject.com/png/12314-200.png',
+					iconSize: [60,50], // size of the icon
+					popupAnchor: [0,-15],
+				});
+				
+				var customPopup = "You Are Here.";
+		
+				// specify popup options 
+				var customOptions =
+				{
+				'maxWidth': '1000',			
+				'className' : 'custom'
+				}
+				
+				var marker = L.marker([position.coords.latitude, position.coords.longitude], {icon: locationIcon}).bindPopup(customPopup,customOptions).addTo(map);
+				console.log("Latitude: " + position.coords.latitude + "<br>Longitude: " + position.coords.longitude); 
+			}
+
 			// create custom icon
-    		var BusStop = L.Icon.extend({
-    		options: {
-        		iconSize:     [75, 75],
-        		iconAnchor:   [32.5, 75],
-        		popupAnchor:  [-3, -76]
-    			}
+			var BusStop = L.Icon.extend({
+				options: {
+					iconSize: [75, 75],
+					iconAnchor: [32.5, 75],
+					popupAnchor: [-3, -76]
+				}
 			});
 
 			//links to images used for stops
 			var linkBusStop = 'https://cdn.iconscout.com/icon/premium/png-512-thumb/bus-stop-10-660162.png'
 			var linkBusStation = 'https://cdn2.iconfinder.com/data/icons/large-home-icons/512/Bus_station_transportation_space.png'
-			var stop1 = new BusStop({iconUrl: linkBusStop});
-			var stopBusStation = new BusStop({iconUrl: linkBusStation});
-    
-    		L.icon = function (options) {
-    			return new L.Icon(options);
+			var stop1 = new BusStop({ iconUrl: linkBusStop });
+			var stopBusStation = new BusStop({ iconUrl: linkBusStation });
+
+			L.icon = function (options) {
+				return new L.Icon(options);
 			};
-			
+
 			var stopsArray = []
 			var stationsArray = []
 			let busses = [
 				//Remove when Dwayne is ready
 				{title: "Test", location: { latLng: L.latLng(56.458522, -2.97107), zoom: 17, headingDegrees: 235}},
 			];
-			
+
 			//Open schedule when a bus stop/station is clicked
-			function newWindow(value) {
-			
+			function newWindow() {
+
 				var myWindow;
-    			var width = 400;
-    			var height = 300;
-    			var left = parseInt((screen.availWidth/2) - (width/2));
-    			var top = parseInt((screen.availHeight/2) - (height/2));
-    			var windowFeatures = "width=" + width + ",height=" + height + ",status,resizable,left=" + left + ",top=" + top + ",location = no";
-    			
-				
+				var width = 400;
+				var height = 300;
+				var left = parseInt((screen.availWidth / 2) - (width / 2));
+				var top = parseInt((screen.availHeight / 2) - (height / 2));
+				var windowFeatures = "width=" + width + ",height=" + height + ",status,resizable,left=" + left + ",top=" + top + ",location = no";
+
+
 				myWindow = window.open("", "mywindow", windowFeatures);
-				setTimeout(function(){
-				myWindow.document.title = 'Bus schdule' ;
+				setTimeout(function () {
+					myWindow.document.title = 'Bus schdule';
 				}, 10);//open() and title() is asynchronous
-				
 				var txt = "schedule";
-				myWindow.document.write("<center>" + txt.fontsize(6) + "</center>" + "<br></br>");
-				
-				if (value < 100) { // Distinguish better a bus stop and a bus station
-				
-					myWindow.document.write ("Bus stop nº: " + locations[value][2] + "<br></br>");
-					myWindow.document.write ("This is route " + locations[value][3] + "<br></br>");
-					myWindow.document.write ("Bus stop name: " + locations[value][4]);
-				}
-				else {
-					value = value - 1000 // Get the real value again
-					myWindow.document.write ("Bus Station nº: " + locationBusStations[value][2] + "<br></br>");
-					myWindow.document.write ("This is in route " + locationBusStations[value][3] + "<br></br>");
-					myWindow.document.write ("Station name: " + locationBusStations[value][4]);
-					
-				}
-				
+				myWindow.document.write("<center>" + txt.fontsize(6) + "</center>");
+				//document.write("<p>Fontcolor: " + txt.fontcolor("green") + "</p>");//change the color
+				//document.write("<p>Link: " + txt.link("https://www.w3schools.com") + "</p>");//add a link
 			}
 			//Add bus stops
-			for (i = 0; i < locations.length; i++) {  
-				var x = i
-				var stops = L.marker([locations[i][0], locations[i][1]], {icon: stop1}).on('click', L.bind(newWindow, null, x));
+			for (i = 0; i < locations.length; i++) {
+
+				var stops = L.marker([locations[i][0], locations[i][1]], { icon: stop1 }).on('click', function () { newWindow() });
+
 				stopsArray[i] = stops
-		
-      		};
-      		
-      		//Add bus stations
-      		for (i = 0; i < locationBusStations.length; i++) {  
-				var z = 1000 + i // Distinguish better a bus stop and a bus station
-        		var stations = L.marker([locationBusStations[i][0], locationBusStations[i][1]], {icon: stopBusStation}).on('click', L.bind(newWindow, null, z));
-        		stationsArray[i] = stations
-        		
-      		};
-      		
-      		//Hide  bus stops markers when zoomed out
-      		var stopMarkers = new L.FeatureGroup();
-      		
-      		for (i = 0; i < locations.length; i++) {
-      		
-      			stopMarkers.addLayer(stopsArray[i]);
+
+			};
+
+			//Add bus stations
+			for (i = 0; i < locationBusStations.length; i++) {
+
+				var stations = L.marker([locationBusStations[i][0], locationBusStations[i][1]], { icon: stopBusStation }).on('click', function () { newWindow() });
+				stationsArray[i] = stations
+			};
+
+			//Hide  bus stops markers when zoomed out
+			var stopMarkers = new L.FeatureGroup();
+
+			for (i = 0; i < locations.length; i++) {
+
+				stopMarkers.addLayer(stopsArray[i]);
 			}
-			   
-      		 // Add markers the first time the page is loaded
-      		map.addLayer(stopMarkers);
-      		map.on('zoomend', function() {
-    			if (map.getZoom() < 14){
-            		map.removeLayer(stopMarkers);
-    				}
-    				else {
-            		map.addLayer(stopMarkers);
-        			}
+
+			// Add markers the first time the page is loaded
+			map.addLayer(stopMarkers);
+			map.on('zoomend', function () {
+				if (map.getZoom() < 14) {
+					map.removeLayer(stopMarkers);
+				}
+				else {
+					map.addLayer(stopMarkers);
+				}
 			});
-			
+
 			//Hide  bus stations markers when zoomed out
 			var stationMarkers = new L.FeatureGroup();
-      		
-      		for (i = 0; i < locationBusStations.length; i++) {
-      		
-      			stationMarkers.addLayer(stationsArray[i]);
-      		}
-			   
+
+			for (i = 0; i < locationBusStations.length; i++) {
+
+				stationMarkers.addLayer(stationsArray[i]);
+			}
+
 			// Add markers the first time the page is loaded
-      		map.addLayer(stationMarkers);
-      		map.on('zoomend', function() {
-    			if (map.getZoom() < 14){
-            		map.removeLayer(stationMarkers);
-    				}
-    				else {
-            		map.addLayer(stationMarkers);
-        			}
+			map.addLayer(stationMarkers);
+			map.on('zoomend', function () {
+				if (map.getZoom() < 14) {
+					map.removeLayer(stationMarkers);
+				}
+				else {
+					map.addLayer(stationMarkers);
+				}
 			});
-			
-			//create a feature group for routes
-			var routeFeatureGroup = new L.FeatureGroup();
-			//add all routes to map via layer
-      		map.addLayer(routeFeatureGroup);
-			//on zoomout varible <13, remove from map
-      		map.on('zoomend', function() {
-    			if (map.getZoom() < 13){
-            		map.removeLayer(routeFeatureGroup);
-    				}
-    				else {
-            		map.addLayer(routeFeatureGroup);
-        			}
-			});
-      			
-			//function which creates a route for a specific bus X
-			function getRoute(x)
-			{
+
+			function getRoute(x) {
 				var busNumber = x;
 				$.get({
 					url: "/getBusStops",
-					data : {busNumber : x},
-					success : function(json) {
-						routes[x] = json[0].route;				
-						//create the polyline
-						var bus = L.polyline(routes[x], {color: getRandomColor(), className: 'BusOptions'});
-						//add this route to the route group
-						routeFeatureGroup.addLayer(bus);
-						//event handler for onclick event
+					data: { busNumber: x },
+					success: function (json) {
+						routes[x] = json[0].route;
+						var bus = L.polyline(routes[x], { color: getRandomColor(), className: 'BusOptions' }).addTo(map);
+
 						function OnBusClick() {
 							alert("This is route : " + x);
 						}
 						bus.on('click', L.bind(OnBusClick, null, x));
-						
-						//on mouseover bring the route to front
-						bus.on('mouseover', function(e) {
-							e.target.bringToFront();
-						});
-						
+
+
+
+
 					}
 				})
 			}
-			
+
 			//creates each route
 			var numberOneBus = getRoute(1);
 			var numberFourBus = getRoute(4);
@@ -186,22 +201,23 @@
 			var numberFourteenBus = getRoute(18);
 			var numberThirtyTwoBus = getRoute(75);
 			var numberNinetyNineBus = getRoute(99);
-			
+
 			//BEWARE - if routes > colors then new routes will be black
-			var colors = ['ef0b0b','ef670b','1bc415','26e2c0','9c73dd','ff1c63', '291A6D', '3B552E', '922C2C', '82244D', 'B62222', '2B781F', '85B87D', 'E9E43D', 'DD832F', '9F7676', '1D2FB2', 'efd809', '00705d', '004570', '310449', 'b7005b'];
+			var colors = ['ef0b0b', 'ef670b', '1bc415', '26e2c0', '9c73dd', 'ff1c63', '291A6D', '3B552E', '922C2C', '82244D', 'B62222', '2B781F', '85B87D', 'E9E43D', 'DD832F', '9F7676', '1D2FB2', 'efd809', '00705d', '004570', '310449', 'b7005b'];
 			function getRandomColor() {
 				// hexadecimal starting symbol
-				var hashtag = '#'; 
-                //Set your colors here
-                if (colors.length > 0){
+				var hashtag = '#';
+				//Set your colors here
+				if (colors.length > 0) {
 					var chosenIndex = Math.floor(Math.random() * colors.length);
 					var color = hashtag += colors[chosenIndex];
 					colors.splice(chosenIndex, 1);
-				}else{
+				} else {
 					var color = '#000000'
 				}
 				return color;
 			}
+
 			var locationSearchService = {
         fetchNearbyLocationsByTerm: function(latLng, term, callback) {
           term = term.trim().toLowerCase();
@@ -238,8 +254,116 @@
         locationSearchService: locationSearchService
       };
       var searchbar = new WrldSearchbar("widget-container", map, searchbarConfig);
-			</script>		
-		</div>
+
+
+			//placeholder bus trigger marker
+			var trigger = L.marker([56.46135, -2.97943], { title: "first" }).addTo(map);
+
+			//bus icon
+			var myIcon = L.icon({
+				iconUrl: 'leftTransparent.png',
+				iconSize: [100, 100],
+				iconAnchor: [50, 50],
+			});
+
+			//longitude/altitude finder
+			/*map.on("click", function (e) {
+				pixelPosition = e.layerPoint;
+				latLng = map.layerPointToLatLng(pixelPosition);
+				alert("Pixel position = " + pixelPosition + "\nLatLng = " + latLng);
+			});*/
+
+			//bus movement control function
+			trigger.on('click', function (evt) {
+				$.get({
+					url: "/getBusStops",
+					data: { busNumber: '1' },
+					success: function (json) {
+						busMove(json[0].route);
+					}
+				})
+			});
+
+			//bus speed and framerate settings
+			var busSpeed = 3000; //milliseconds between each route point
+			var animationFrames = 40; //number of busses between each route point
+
+			function busMove(positionArray) {
+				var position = positionArray[0];
+				var bus = L.marker(position, { icon: myIcon }).addTo(map);
+				var i = 0;
+				var j = 0;
+				var test = setInterval(() => {
+					i++;
+					if (i !== 0 && i < positionArray.length) {
+						var intervals = calculateBusAnimationPosition(positionArray[i - 1], positionArray[i]);
+						executeBusMoveWithAnimation(bus, intervals);
+					} else {
+						clearInterval(test);
+					}
+				}, busSpeed); //timer speed
+			}
+
+			function executeBusMoveWithAnimation(bus, intervals) {
+				var j = 0;
+				var refreshId = setInterval(() => {
+					j++;
+					if (j < intervals.length) {
+						bus.setLatLng(intervals[j]).update();
+					}
+					else {
+						clearInterval(refreshId);
+					}
+				}, busSpeed / animationFrames); //timer speed
+			}
+
+			function calculateBusAnimationPosition(positionOld, positionNew) {
+				var xDistance = positionNew[0] - positionOld[0];
+				var yDistance = positionNew[1] - positionOld[1];
+				var xStep = xDistance / animationFrames;
+				var yStep = yDistance / animationFrames;
+				//console.log("x distance: " + xDistance + " y distance: " + yDistance);
+				//var animationFramesTemp = animationFrames;
+				//biggest ones
+				/*if(xDistance < -0.002 || xDistance > 0.002 || yDistance < -0.002 || yDistance > 0.002){
+					var bus = L.marker(positionNew).addTo(map);
+					//animationFramesTemp += 10; //CAUSING FRAME SKIPS, SOMETHING IS WRONG, MORE NEEDS TO BE CHANGED
+					var xStep = xDistance / animationFramesTemp;
+					var yStep = yDistance / animationFramesTemp;
+				//normal size
+				} else if(xDistance < -0.0005 || xDistance > 0.0005 || yDistance < -0.0005 || yDistance > 0.0005) {
+					animationFramesTemp = animationFramesTemp + 20;
+					var xStep = xDistance / animationFramesTemp;
+					var yStep = yDistance / animationFramesTemp;
+				//smallest ones
+				} else {
+					//var bus = L.marker(positionNew, {opacity: 0.5}).addTo(map);
+					var xStep = xDistance / animationFramesTemp;
+					var yStep = yDistance / animationFramesTemp;
+				}*/
+				var arrayPositionSteps = [];
+				var positionOldCopy = positionOld;
+				for (var i = 0; i < animationFrames + 1; i++) {
+					xPosition = positionOldCopy[0];
+					yPosition = positionOldCopy[1];
+					if (i === animationFrames) {
+						arrayPositionSteps[i] = positionNew;
+					} else if (i === 0) {
+						arrayPositionSteps[i] = positionOldCopy;
+					} else {
+						arrayPositionSteps[i] = [xPosition + xStep, yPosition + yStep];
+					}
+					positionOldCopy = arrayPositionSteps[i];
+				}
+				return arrayPositionSteps;
+			}
+
+
+
+		</script>
+	</div>
+
 	</div>
 </body>
+
 </html>
