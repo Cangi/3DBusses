@@ -1,4 +1,14 @@
 <html>
+<head>
+<script src="https://cdn-webgl.wrld3d.com/wrldjs/dist/latest/wrld.js"></script>
+<script src="busRoutes.js"></script>
+<script src="busStopList.js"></script>
+<link href="https://cdn-webgl.wrld3d.com/wrldjs/addons/resources/latest/css/wrld.css" rel="stylesheet"/>
+<script src="https://code.jquery.com/jquery-3.3.1.js" integrity="sha256-2Kok7MbOyxpgUVvAk/HJ2jigOSYS2auK4Pfzbm7uH60=" crossorigin="anonymous"></script>
+<script src="https://cdn-webgl.wrld3d.com/wrldjs/addons/searchbar/latest/searchbar.js"></script>
+<link href="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.0.1/leaflet.css" rel="stylesheet" />
+<link rel="stylesheet" href="testcss.css">
+
 
 <head>
 	<script src="https://cdn-webgl.wrld3d.com/wrldjs/dist/latest/wrld.js"></script>
@@ -12,9 +22,10 @@
 <body>
 
 	<div style="position: relative">
-		<div id="map" style="height: 100%"></div>
-		<script>
-		
+		<div id="widget-container" class="wrld-widget-container"></div>
+		<div id="map" style="height: 100%"></div>		
+			<script>
+
 			let routes = {};
 			//create map
 			var map = L.Wrld.map("map", "c976700dbe05df6d18bdab38af2b1ae2", { center: [56.458522, -2.97107], zoom: 15 });
@@ -78,45 +89,88 @@
 			L.icon = function (options) {
 				return new L.Icon(options);
 			};
-
+			
+			function leeArchivo(file)
+			{
+				var archivo = new XMLHttpRequest();
+				archivo.open("GET", file, false);
+				archivo.onreadystatechange = function ()
+				{
+					if(archivo.readyState === 4)
+					{
+						if(archivo.status === 200 || archivo.status == 0)
+						{
+							var Texto = archivo.responseText;
+							//alert(Texto);
+							myWindow.document.write (Texto);
+						}
+					}
+				}
+				archivo.send(null);
+			}
+			
+			
 			var stopsArray = []
 			var stationsArray = []
+			var myWindow;
+			
+			let busses = [
+				//Remove when Dwayne is ready
+				{title: "Test", location: { latLng: L.latLng(56.458522, -2.97107), zoom: 17, headingDegrees: 235}},
+			];
 
 			//Open schedule when a bus stop/station is clicked
-			function newWindow() {
-
-				var myWindow;
-				var width = 400;
-				var height = 300;
-				var left = parseInt((screen.availWidth / 2) - (width / 2));
-				var top = parseInt((screen.availHeight / 2) - (height / 2));
-				var windowFeatures = "width=" + width + ",height=" + height + ",status,resizable,left=" + left + ",top=" + top + ",location = no";
-
-
+			function newWindow(value) {
+			
+				//var myWindow;
+    			var width = 400;
+    			var height = 300;
+    			var left = parseInt((screen.availWidth/2) - (width/2));
+    			var top = parseInt((screen.availHeight/2) - (height/2));
+    			var windowFeatures = "width=" + width + ",height=" + height + ",status,resizable,left=" + left + ",top=" + top + ",location = no";
+    			
+				
 				myWindow = window.open("", "mywindow", windowFeatures);
-				setTimeout(function () {
-					myWindow.document.title = 'Bus schdule';
+				setTimeout(function(){
+				myWindow.document.title = 'Bus schdule' ;
 				}, 10);//open() and title() is asynchronous
-				var txt = "schedule";
-				myWindow.document.write("<center>" + txt.fontsize(6) + "</center>");
-				//document.write("<p>Fontcolor: " + txt.fontcolor("green") + "</p>");//change the color
-				//document.write("<p>Link: " + txt.link("https://www.w3schools.com") + "</p>");//add a link
+				
+				var txt = "Schedule";
+				myWindow.document.write("<center>" + txt.fontsize(6) + "</center>" + "<br></br>");
+				
+				if (value < 100) { // Distinguish better a bus stop and a bus station
+				
+					myWindow.document.write ("Bus stop nº: " + locations[value][2] + "<br></br>");
+					myWindow.document.write ("This is route " + locations[value][3] + "<br></br>");
+					myWindow.document.write ("Bus stop name: " + locations[value][4] + "<br></br>");
+					var t = (locations[value][3] + ".txt")
+					
+					leeArchivo(t);
+				}
+				else {
+					value = value - 1000 // Get the real value again
+					myWindow.document.write ("Bus Station nº: " + locationBusStations[value][2] + "<br></br>");
+					myWindow.document.write ("This is in route " + locationBusStations[value][3] + "<br></br>");
+					myWindow.document.write ("Station name: " + locationBusStations[value][4]);
+					
+				}
+				
 			}
 			//Add bus stops
-			for (i = 0; i < locations.length; i++) {
-
-				var stops = L.marker([locations[i][0], locations[i][1]], { icon: stop1 }).on('click', function () { newWindow() });
-
+			for (i = 0; i < locations.length; i++) {  
+				var x = i
+				var stops = L.marker([locations[i][0], locations[i][1]], {icon: stop1}).on('click', L.bind(newWindow, null, x));
 				stopsArray[i] = stops
-
-			};
-
-			//Add bus stations
-			for (i = 0; i < locationBusStations.length; i++) {
-
-				var stations = L.marker([locationBusStations[i][0], locationBusStations[i][1]], { icon: stopBusStation }).on('click', function () { newWindow() });
-				stationsArray[i] = stations
-			};
+		
+      		};
+      		
+      		//Add bus stations
+      		for (i = 0; i < locationBusStations.length; i++) {  
+				var z = 1000 + i // Distinguish better a bus stop and a bus station
+        		var stations = L.marker([locationBusStations[i][0], locationBusStations[i][1]], {icon: stopBusStation}).on('click', L.bind(newWindow, null, z));
+        		stationsArray[i] = stations
+        		
+      		};
 
 			//Hide  bus stops markers when zoomed out
 			var stopMarkers = new L.FeatureGroup();
@@ -202,6 +256,44 @@
 				}
 				return color;
 			}
+
+			var locationSearchService = {
+        fetchNearbyLocationsByTerm: function(latLng, term, callback) {
+          term = term.trim().toLowerCase();
+          var results = [];
+          if (term.length > 0) {
+            busses.forEach(function(location) {
+              var termPos = location.title.toLowerCase().indexOf(term);
+              if (termPos !== -1) {
+                results.push(Object.assign({}, location, { distSqr: calculateDistSqr(latLng, location.location.latLng) }));
+              }
+            });
+          }
+          results.sort(function(lhs, rhs) { return lhs.distSqr - rhs.distSqr; });
+          callback(results);
+        },
+
+        fetchAutocompleteOptions: function(latLng, term, callback) {
+          term = term.trim().toLowerCase();
+          var options = [];
+          if (term.length > 0) {
+            busses.forEach(function(location) {
+              var termPos = location.title.toLowerCase().indexOf(term);
+              if (termPos !== -1) {
+                options.push(Object.assign({}, location, { pos: termPos }));
+              }
+            });
+          }
+          options.sort(function(lhs, rhs) { return lhs.pos - rhs.pos; });
+          callback(options);
+        }
+      }
+
+      var searchbarConfig = {
+        locationSearchService: locationSearchService
+      };
+      var searchbar = new WrldSearchbar("widget-container", map, searchbarConfig);
+
 
 			//placeholder bus trigger marker
 			var trigger = L.marker([56.46135, -2.97943], { title: "first" }).addTo(map);
@@ -309,6 +401,7 @@
 
 		</script>
 	</div>
+
 	</div>
 </body>
 

@@ -69,8 +69,7 @@ var locations = [
 
 var locationBusStations = [
       			
-      			[56.463849, -2.964979, 1, 75, "City Centre Bus Station"],
-				[56.463175, -2.966242, 2, 99, "City Centre Bus Station"],
+      			[56.463849, -2.964979, 1, "75 and 99", "City Centre Bus Station"],
     			];
 
    

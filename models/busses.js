@@ -18,7 +18,11 @@ const busSchema = mongoose.Schema({
     schedule : {
         type : [{name:String,time:[]}],
         require : false
-    }
+    },
+    delay : {
+      type : Number,
+      required : false
+    } 
   });
 
   const Bus = module.exports = mongoose.model('Bus',busSchema);
