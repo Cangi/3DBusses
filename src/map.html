@@ -1,16 +1,14 @@
 <html>
-<head>
-<script src="https://cdn-webgl.wrld3d.com/wrldjs/dist/latest/wrld.js"></script>
-<script src="busRoutes.js"></script>
-<script src="busStopList.js"></script>
-<link href="https://cdn-webgl.wrld3d.com/wrldjs/addons/resources/latest/css/wrld.css" rel="stylesheet"/>
-<script src="https://code.jquery.com/jquery-3.3.1.js" integrity="sha256-2Kok7MbOyxpgUVvAk/HJ2jigOSYS2auK4Pfzbm7uH60=" crossorigin="anonymous"></script>
-<script src="https://cdn-webgl.wrld3d.com/wrldjs/addons/searchbar/latest/searchbar.js"></script>
-<link href="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.0.1/leaflet.css" rel="stylesheet" />
-<link rel="stylesheet" href="testcss.css">
-
 
 <head>
+	<script src="https://cdn-webgl.wrld3d.com/wrldjs/dist/latest/wrld.js"></script>
+	<script src="busRoutes.js"></script>
+	<script src="busStopList.js"></script>
+	<link href="https://cdn-webgl.wrld3d.com/wrldjs/addons/resources/latest/css/wrld.css" rel="stylesheet" />
+	<script src="https://code.jquery.com/jquery-3.3.1.js" integrity="sha256-2Kok7MbOyxpgUVvAk/HJ2jigOSYS2auK4Pfzbm7uH60=" crossorigin="anonymous"></script>
+	<script src="https://cdn-webgl.wrld3d.com/wrldjs/addons/searchbar/latest/searchbar.js"></script>
+	<link href="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.0.1/leaflet.css" rel="stylesheet" />
+	<link rel="stylesheet" href="testcss.css">
 	<script src="https://cdn-webgl.wrld3d.com/wrldjs/dist/latest/wrld.js"></script>
 	<script src="busRoutes.js"></script>
 	<script src="busStopList.js"></script>
@@ -23,15 +21,15 @@
 
 	<div style="position: relative">
 		<div id="widget-container" class="wrld-widget-container"></div>
-		<div id="map" style="height: 100%"></div>		
-			<script>
+		<div id="map" style="height: 100%"></div>
+		<script>
 
 			let routes = {};
 			//create map
 			var map = L.Wrld.map("map", "c976700dbe05df6d18bdab38af2b1ae2", { center: [56.458522, -2.97107], zoom: 15 });
 			//get location of user
 			getLocation();
-			
+
 			//fuction to get the location
 			function getLocation() {
 				if (navigator.geolocation) {
@@ -40,43 +38,43 @@
 					console.log("Geolocation is not supported by this browser.");
 				}
 			}
-			
+
 			function error(err) {
 				console.warn(`ERROR(${err.code}): ${err.message}`);
 			}
-			
+
 			var geoOptions = {
 				enableHighAccuracy: true
 			};
-			
+
 			//sets the map view to center around the person and adds marker on their location
 			function showPosition(position) {
-			
-				setTimeout(function() {
-				map.setView([position.coords.latitude, position.coords.longitude], 16, {
-				headingDegrees: 270,
-				animate: true,
-				durationSeconds:10
-				});
+
+				setTimeout(function () {
+					map.setView([position.coords.latitude, position.coords.longitude], 16, {
+						headingDegrees: 270,
+						animate: true,
+						durationSeconds: 10
+					});
 				}, 20000);
-				
+
 				var locationIcon = L.icon({
 					iconUrl: 'https://static.thenounproject.com/png/12314-200.png',
-					iconSize: [60,50], // size of the icon
-					popupAnchor: [0,-15],
+					iconSize: [60, 50], // size of the icon
+					popupAnchor: [0, -15],
 				});
-				
+
 				var customPopup = "You Are Here.";
-		
+
 				// specify popup options 
 				var customOptions =
 				{
-				'maxWidth': '1000',			
-				'className' : 'custom'
+					'maxWidth': '1000',
+					'className': 'custom'
 				}
-				
-				var marker = L.marker([position.coords.latitude, position.coords.longitude], {icon: locationIcon}).bindPopup(customPopup,customOptions).addTo(map);
-				console.log("Latitude: " + position.coords.latitude + "<br>Longitude: " + position.coords.longitude); 
+
+				var marker = L.marker([position.coords.latitude, position.coords.longitude], { icon: locationIcon }).bindPopup(customPopup, customOptions).addTo(map);
+				console.log("Latitude: " + position.coords.latitude + "<br>Longitude: " + position.coords.longitude);
 			}
 
 			// create custom icon
@@ -97,87 +95,84 @@
 			L.icon = function (options) {
 				return new L.Icon(options);
 			};
-			
-			function leeArchivo(file)
-			{
+
+			function leeArchivo(file) {
 				var archivo = new XMLHttpRequest();
 				archivo.open("GET", file, false);
-				archivo.onreadystatechange = function ()
-				{
-					if(archivo.readyState === 4)
-					{
-						if(archivo.status === 200 || archivo.status == 0)
-						{
+				archivo.onreadystatechange = function () {
+					if (archivo.readyState === 4) {
+						if (archivo.status === 200 || archivo.status == 0) {
 							var Texto = archivo.responseText;
 							//alert(Texto);
-							myWindow.document.write (Texto);
+							myWindow.document.write(Texto);
 						}
 					}
 				}
 				archivo.send(null);
 			}
-			
-			
+
+
 			var stopsArray = []
 			var stationsArray = []
 			var myWindow;
-			
+
 			let busses = [
 				//Remove when Dwayne is ready
-				{title: "Test", location: { latLng: L.latLng(56.458522, -2.97107), zoom: 17, headingDegrees: 235}},
+				{ title: "Test", location: { latLng: L.latLng(56.458522, -2.97107), zoom: 17, headingDegrees: 235 } },
 			];
 
 			//Open schedule when a bus stop/station is clicked
 			function newWindow(value) {
-			
+
 				//var myWindow;
-    			var width = 400;
-    			var height = 300;
-    			var left = parseInt((screen.availWidth/2) - (width/2));
-    			var top = parseInt((screen.availHeight/2) - (height/2));
-    			var windowFeatures = "width=" + width + ",height=" + height + ",status,resizable,left=" + left + ",top=" + top + ",location = no";
-    			
-				
+				var width = 400;
+				var height = 300;
+				var left = parseInt((screen.availWidth / 2) - (width / 2));
+				var top = parseInt((screen.availHeight / 2) - (height / 2));
+				var windowFeatures = "width=" + width + ",height=" + height + ",status,resizable,left=" + left + ",top=" + top + ",location = no";
+
+
 				myWindow = window.open("", "mywindow", windowFeatures);
-				setTimeout(function(){
-				myWindow.document.title = 'Bus schdule' ;
+				setTimeout(function () {
+					myWindow.document.title = 'Bus schdule';
 				}, 10);//open() and title() is asynchronous
-				
+
 				var txt = "Schedule";
 				myWindow.document.write("<center>" + txt.fontsize(6) + "</center>" + "<br></br>");
-				
+
 				if (value < 100) { // Distinguish better a bus stop and a bus station
-				
+
 					//myWindow.document.write ("Bus stop nº: " + locations[value][2] + "<br></br>");
-					myWindow.document.write ("This is route " + locations[value][3] + "<br></br>");
-					myWindow.document.write ("Bus stop name: " + locations[value][4] + "<br></br>");
+					myWindow.document.write("This is route " + locations[value][3] + "<br></br>");
+					myWindow.document.write("Bus stop name: " + locations[value][4] + "<br></br>");
 					var t = ("StopsSchedule/" + locations[value][2] + ".txt") //Schedule for every stop
 					leeArchivo(t);
 				}
 				else {
 					value = value - 1000 // Get the real value again
-					myWindow.document.write ("Bus Station nº: " + locationBusStations[value][2] + "<br></br>");
-					myWindow.document.write ("This is in route " + locationBusStations[value][3] + "<br></br>");
-					myWindow.document.write ("Station name: " + locationBusStations[value][4]);
-					
+					myWindow.document.write("Bus Station nº: " + locationBusStations[value][2] + "<br></br>");
+					myWindow.document.write("This is in route " + locationBusStations[value][3] + "<br></br>");
+					myWindow.document.write("Station name: " + locationBusStations[value][4]);
+
 				}
-				
+
 			}
+
 			//Add bus stops
-			for (i = 0; i < locations.length; i++) {  
+			for (i = 0; i < locations.length; i++) {
 				var x = i
-				var stops = L.marker([locations[i][0], locations[i][1]], {icon: stop1}).on('click', L.bind(newWindow, null, x));
+				var stops = L.marker([locations[i][0], locations[i][1]], { icon: stop1 }).on('click', L.bind(newWindow, null, x));
 				stopsArray[i] = stops
-		
-      		};
-      		
-      		//Add bus stations
-      		for (i = 0; i < locationBusStations.length; i++) {  
+
+			};
+
+			//Add bus stations
+			for (i = 0; i < locationBusStations.length; i++) {
 				var z = 1000 + i // Distinguish better a bus stop and a bus station
-        		var stations = L.marker([locationBusStations[i][0], locationBusStations[i][1]], {icon: stopBusStation}).on('click', L.bind(newWindow, null, z));
-        		stationsArray[i] = stations
-        		
-      		};
+				var stations = L.marker([locationBusStations[i][0], locationBusStations[i][1]], { icon: stopBusStation }).on('click', L.bind(newWindow, null, z));
+				stationsArray[i] = stations
+
+			};
 
 			//Hide  bus stops markers when zoomed out
 			var stopMarkers = new L.FeatureGroup();
@@ -198,7 +193,7 @@
 				}
 			});
 
-			//Hide  bus stations markers when zoomed out
+			//Hide bus stations markers when zoomed out
 			var stationMarkers = new L.FeatureGroup();
 
 			for (i = 0; i < locationBusStations.length; i++) {
@@ -216,32 +211,31 @@
 					map.addLayer(stationMarkers);
 				}
 			});
-			
+
 			//create a feature group for routes
 			var routeFeatureGroup = new L.FeatureGroup();
 			//add all routes to map via layer
-      		map.addLayer(routeFeatureGroup);
+			map.addLayer(routeFeatureGroup);
 			//on zoomout varible <13, remove from map
-      		map.on('zoomend', function() {
-    			if (map.getZoom() < 13){
-            		map.removeLayer(routeFeatureGroup);
-    				}
-    				else {
-            		map.addLayer(routeFeatureGroup);
-        			}
+			map.on('zoomend', function () {
+				if (map.getZoom() < 13) {
+					map.removeLayer(routeFeatureGroup);
+				}
+				else {
+					map.addLayer(routeFeatureGroup);
+				}
 			});
-      			
+
 			//function which creates a route for a specific bus X
-			function getRoute(x)
-			{
+			function getRoute(x) {
 				var busNumber = x;
 				$.get({
 					url: "/getBusStops",
-					data : {busNumber : x},
-					success : function(json) {
-						routes[x] = json[0].route;				
+					data: { busNumber: x },
+					success: function (json) {
+						routes[x] = json[0].route;
 						//create the polyline
-						var bus = L.polyline(routes[x], {color: getRandomColor(), className: 'BusOptions'});
+						var bus = L.polyline(routes[x], { color: getRandomColor(), className: 'BusOptions' });
 						//add this route to the route group
 						routeFeatureGroup.addLayer(bus);
 						//event handler for onclick event
@@ -249,16 +243,16 @@
 							alert("This is route : " + x);
 						}
 						bus.on('click', L.bind(OnBusClick, null, x));
-						
-							//on mouseover bring the route to front
-						bus.on('mouseover', function(e) {
+
+						//on mouseover bring the route to front
+						bus.on('mouseover', function (e) {
 							e.target.bringToFront();
-						});				
+						});
 					}
 				})
 			}
-				
-				
+
+
 			//creates each route
 			var numberOneBus = getRoute(1);
 			var numberFourBus = getRoute(4);
@@ -286,41 +280,41 @@
 			}
 
 			var locationSearchService = {
-        fetchNearbyLocationsByTerm: function(latLng, term, callback) {
-          term = term.trim().toLowerCase();
-          var results = [];
-          if (term.length > 0) {
-            busses.forEach(function(location) {
-              var termPos = location.title.toLowerCase().indexOf(term);
-              if (termPos !== -1) {
-                results.push(Object.assign({}, location, { distSqr: calculateDistSqr(latLng, location.location.latLng) }));
-              }
-            });
-          }
-          results.sort(function(lhs, rhs) { return lhs.distSqr - rhs.distSqr; });
-          callback(results);
-        },
+				fetchNearbyLocationsByTerm: function (latLng, term, callback) {
+					term = term.trim().toLowerCase();
+					var results = [];
+					if (term.length > 0) {
+						busses.forEach(function (location) {
+							var termPos = location.title.toLowerCase().indexOf(term);
+							if (termPos !== -1) {
+								results.push(Object.assign({}, location, { distSqr: calculateDistSqr(latLng, location.location.latLng) }));
+							}
+						});
+					}
+					results.sort(function (lhs, rhs) { return lhs.distSqr - rhs.distSqr; });
+					callback(results);
+				},
 
-        fetchAutocompleteOptions: function(latLng, term, callback) {
-          term = term.trim().toLowerCase();
-          var options = [];
-          if (term.length > 0) {
-            busses.forEach(function(location) {
-              var termPos = location.title.toLowerCase().indexOf(term);
-              if (termPos !== -1) {
-                options.push(Object.assign({}, location, { pos: termPos }));
-              }
-            });
-          }
-          options.sort(function(lhs, rhs) { return lhs.pos - rhs.pos; });
-          callback(options);
-        }
-      }
+				fetchAutocompleteOptions: function (latLng, term, callback) {
+					term = term.trim().toLowerCase();
+					var options = [];
+					if (term.length > 0) {
+						busses.forEach(function (location) {
+							var termPos = location.title.toLowerCase().indexOf(term);
+							if (termPos !== -1) {
+								options.push(Object.assign({}, location, { pos: termPos }));
+							}
+						});
+					}
+					options.sort(function (lhs, rhs) { return lhs.pos - rhs.pos; });
+					callback(options);
+				}
+			}
 
-      var searchbarConfig = {
-        locationSearchService: locationSearchService
-      };
-      var searchbar = new WrldSearchbar("widget-container", map, searchbarConfig);
+			var searchbarConfig = {
+				locationSearchService: locationSearchService
+			};
+			var searchbar = new WrldSearchbar("widget-container", map, searchbarConfig);
 
 
 			//placeholder bus trigger marker
@@ -346,29 +340,119 @@
 					url: "/getBusStops",
 					data: { busNumber: '1' },
 					success: function (json) {
-						busMove(json[0].route);
+						console.log(json[0].stops);
+						console.log(json[0].route);
+						busMove(json[0].route, json[0].stops);
 					}
 				})
 			});
 
 			//bus speed and framerate settings
-			var busSpeed = 3000; //milliseconds between each route point
-			var animationFrames = 40; //number of busses between each route point
+			var busSpeed = 3000; //milliseconds between each route point 
+			var animationFrames = 60; //number of busses between each route point
 
-			function busMove(positionArray) {
+			var placeholderStop = L.marker([56.462979, -2.97141]).addTo(map);
+
+			function getSpeed(positionArray, positionStop, deadline) {
+				var counter = 0;
+				var posX = positionArray[0][0];
+				var posY = positionArray[0][1];
+				while(posX !== positionStop[0] && posY !== positionStop[1]) { //positionArray[counter] !== positionStop
+					console.log(positionArray[counter] + " must match " + positionStop);
+					counter++;
+					var posX = positionArray[counter][0];
+					var posY = positionArray[counter][1];
+				}
+				deadline = deadline * 60;
+				var timePerSection = (deadline / counter) * 1000;
+				console.log("the bus needs to spend " + timePerSection + " milliseconds per route section");
+				return timePerSection;
+			}
+
+			function busMove(positionArray, busStops) {
+				busStopTimes = [ //placeholder
+					[
+						[56.462073,
+						-2.977424],0
+					],
+					[
+						[56.463148,
+						-2.970305],2
+					],
+					[
+						[56.471851,
+						-2.968487],5
+					],
+					[
+						[56.47129,
+						-2.973604],11
+					],
+					[
+						[56.472479,
+						-2.992712],null
+					],
+					[
+						[56.473129,
+						-3.005436],null
+					],
+					[
+						[56.480609,
+						-3.001139],null
+					],
+					[
+						[56.483013,
+						-3.011505],22
+					],
+					[
+						[56.496252,
+						-3.018334],33
+					]
+				]
+				/*var a = 0;
+				busStops.forEach(function () {
+					positionArray.push(busStops[a]);
+					a++;
+				})*/
+				//var path = [];
+				//path = positionArray.concat(busStops);
+				//path.sort();
+				//console.log(path);
+				console.log(busStopTimes);
+				var date = new Date();
+				var currentHour = date.getHours();
+				var currentMinute = date.getMinutes();
+				var currentSecond = date.getSeconds();
+				//console.log(currentHour + " " + currentMinute + " " + currentSecond);
 				var position = positionArray[0];
 				var bus = L.marker(position, { icon: myIcon }).addTo(map);
 				var i = 0;
-				var j = 0;
-				var test = setInterval(() => {
+				var positionStop = [56.462979, -2.97141];
+				busSpeed = getSpeed(positionArray, positionStop, 1);
+				var interval = setInterval(() => {
 					i++;
-					if (i !== 0 && i < positionArray.length) {
+					if (i < positionArray.length) {
+						console.log(positionArray[i]);
 						var intervals = calculateBusAnimationPosition(positionArray[i - 1], positionArray[i]);
 						executeBusMoveWithAnimation(bus, intervals);
+						var newDate = new Date();
+						console.log(newDate.getHours() + " " + newDate.getMinutes() + " " + newDate.getSeconds());
+						if (i === 6) {
+							console.log("BUS STOP REACHED IN TIME");
+						}
 					} else {
-						clearInterval(test);
+						clearInterval(interval);
 					}
 				}, busSpeed); //timer speed
+			}
+
+			function avoidFirstWait(i) {
+				if (i !== 0) {
+					console.log("first");
+					return busSpeed;
+				}
+				else {
+					return 0;
+				}
 			}
 
 			function executeBusMoveWithAnimation(bus, intervals) {
@@ -424,9 +508,6 @@
 				}
 				return arrayPositionSteps;
 			}
-
-
-
 		</script>
 	</div>
 
