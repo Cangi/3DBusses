@@ -36,8 +36,8 @@ var locations = [
 				//[56.463849, -2.964979, 21, 75], //City Centre, Bus Station
 				[56.469494, -2.894323, 22, 75, "West Ferry/Broughty Ferry, Ogilvie Court"],
 				[56.468344, -2.875823, 23, 75, "Broughty Ferry, Library"],
-				[56.482518, -2.835273, 24, 75, "Monifieth, Grange Primary School"],
-				[56.490589, -2.833582, 25, 75, "Ethiebeaton Park, Dobbie's Garden Centre"],
+				[56.482518, -2.836319, 24, 75, "Monifieth, Grange Primary School"],
+				[56.490589, -2.837750, 25, 75, "Ethiebeaton Park, Dobbie's Garden Centre"],
 				
 				//Route 4
 				[56.459433, -2.970198, 26, 4, "Whitehall Street W1"],
