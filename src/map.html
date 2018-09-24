@@ -208,28 +208,49 @@
 					map.addLayer(stationMarkers);
 				}
 			});
-
-			function getRoute(x) {
+			
+			//create a feature group for routes
+			var routeFeatureGroup = new L.FeatureGroup();
+			//add all routes to map via layer
+      		map.addLayer(routeFeatureGroup);
+			//on zoomout varible <13, remove from map
+      		map.on('zoomend', function() {
+    			if (map.getZoom() < 13){
+            		map.removeLayer(routeFeatureGroup);
+    				}
+    				else {
+            		map.addLayer(routeFeatureGroup);
+        			}
+			});
+      			
+			//function which creates a route for a specific bus X
+			function getRoute(x)
+			{
 				var busNumber = x;
 				$.get({
 					url: "/getBusStops",
-					data: { busNumber: x },
-					success: function (json) {
-						routes[x] = json[0].route;
-						var bus = L.polyline(routes[x], { color: getRandomColor(), className: 'BusOptions' }).addTo(map);
-
+					data : {busNumber : x},
+					success : function(json) {
+						routes[x] = json[0].route;				
+						//create the polyline
+						var bus = L.polyline(routes[x], {color: getRandomColor(), className: 'BusOptions'});
+						//add this route to the route group
+						routeFeatureGroup.addLayer(bus);
+						//event handler for onclick event
 						function OnBusClick() {
 							alert("This is route : " + x);
 						}
 						bus.on('click', L.bind(OnBusClick, null, x));
-
-
-
-
+						
+							//on mouseover bring the route to front
+						bus.on('mouseover', function(e) {
+							e.target.bringToFront();
+						});				
 					}
 				})
 			}
-
+				
+				
 			//creates each route
 			var numberOneBus = getRoute(1);
 			var numberFourBus = getRoute(4);
