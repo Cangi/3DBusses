@@ -35,11 +35,19 @@
 			//fuction to get the location
 			function getLocation() {
 				if (navigator.geolocation) {
-					navigator.geolocation.getCurrentPosition(showPosition);
+					navigator.geolocation.getCurrentPosition(showPosition, error, geoOptions);
 				} else {
 					console.log("Geolocation is not supported by this browser.");
 				}
 			}
+			
+			function error(err) {
+				console.warn(`ERROR(${err.code}): ${err.message}`);
+			}
+			
+			var geoOptions = {
+				enableHighAccuracy: true
+			};
 			
 			//sets the map view to center around the person and adds marker on their location
 			function showPosition(position) {
