@@ -169,6 +169,7 @@
 				}
 				
 			}
+			
 			//Add bus stops
 			for (i = 0; i < locations.length; i++) {  
 				var x = i
@@ -250,20 +251,43 @@
 						var bus = L.polyline(routes[x], {color: getRandomColor(), className: 'BusOptions'});
 						//add this route to the route group
 						routeFeatureGroup.addLayer(bus);
+						
+						//Open schedule when a bus stop/station is clicked
+						function priceWindow(value) {
+						
+							//var myWindow;
+							var width = 1100;
+							var height = 900;
+							var left = parseInt((screen.availWidth/2) - (width/2));
+							var top = parseInt((screen.availHeight/2) - (height/2));
+							var windowFeatures = "width=" + width + ",height=" + height + ",status,resizable,left=" + left + ",top=" + top + ",location = no";
+							
+							
+							myWindow = window.open("https://www.stagecoachbus.com/tickets", "mywindow", windowFeatures);
+							setTimeout(function(){
+							myWindow.document.title = 'Buy Tickets' ;
+							}, 10);//open() and title() is asynchronous						
+						}
+						
+						
 						//event handler for onclick event
 						function OnBusClick() {
-							alert("This is route : " + x);
+							if (confirm("This is Route " + x + "\nWould you like to view tickets and prices?")) {
+								priceWindow();
+							} 							
 						}
 						bus.on('click', L.bind(OnBusClick, null, x));
 						
 							//on mouseover bring the route to front
 						bus.on('mouseover', function(e) {
 							e.target.bringToFront();
-						});				
+						});	
+
 					}
 				})
 			}
-				
+			
+			
 				
 			//creates each route
 			var numberOneBus = getRoute(1);
