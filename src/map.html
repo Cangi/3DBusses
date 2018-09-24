@@ -187,42 +187,89 @@
 				})
 			});
 
-			var trigger2 = L.marker([56.46238, -2.97873], { title: "second" }).addTo(map);
-			trigger.on('click', function (evt) {
+			//var trigger2 = L.marker([56.46238, -2.97873], { title: "second" }).addTo(map);
+			/*trigger.on('click', function (evt) {
 				console.log(bus);
-			});
+			});*/
 
-			var busStopsWithTime = 
-			[[[56.46271, -2.97877],0],
-			[[],2],
-			[[],5],
-			[[],11],
-			[[],null],
-			[[],null],
-			[[],null],
-			[[],22],
-			[[],null],
-			[[],33]];
+			/*var busStopsWithTime = 
+			[
+				[[],0],
+				[[],2],
+				[[],5],
+				[[],11],
+				[[],null],
+				[[],null],
+				[[],null],
+				[[],22],
+				[[],null],
+				[[],33]
+			];*/
 
 			//bus speed and framerate settings
-			var busSpeed = 8000; //milliseconds between each route point 3000
+			var busSpeed = 3000; //milliseconds between each route point 
 			var animationFrames = 40; //number of busses between each route point
 
+			var placeholderStop = L.marker([56.462979, -2.97141]).addTo(map);
+
+			function getSpeed(positionArray, positionStop, deadline) {
+				var counter = 0;
+				var bool = false;
+				/*while(bool !== true) {
+					console.log(positionArray[counter] + " must match " + positionStop);
+					var test = positionArray[counter];
+					if(test[0][1] === positionStop) {
+						bool = true;
+						console.log("yay");
+					} 
+					if(counter === 10){
+						bool = true;
+					}
+					counter++;
+				}*/
+				counter = 6; //TODO FIX WHILE LOOP PROBLEM
+				deadline = deadline * 60;
+				var timePerSection = (deadline / counter) * 1000;
+				console.log("the bus needs to spend " + timePerSection + " milliseconds per route section");			
+				return timePerSection;
+			}
+
 			function busMove(positionArray) {
-				console.log(positionArray);
+				var date = new Date();
+				var currentHour = date.getHours();
+				var currentMinute = date.getMinutes();
+				var currentSecond = date.getSeconds();
+				//console.log(currentHour + " " + currentMinute + " " + currentSecond);
 				var position = positionArray[0];
 				var bus = L.marker(position, { icon: myIcon }).addTo(map);
 				var i = 0;
-				var j = 0;
-				var test = setInterval(() => {
+				var positionStop = [56.462979, -2.97141];
+				busSpeed = getSpeed(positionArray, positionStop, 1);
+				var interval = setInterval(() => {
 					i++;
 					if (i !== 0 && i < positionArray.length) {
+						console.log(positionArray[i]);
 						var intervals = calculateBusAnimationPosition(positionArray[i - 1], positionArray[i]);
 						executeBusMoveWithAnimation(bus, intervals);
+						var newDate = new Date();
+						console.log(newDate.getHours() + " " + newDate.getMinutes() + " " + newDate.getSeconds());
+						if(i === 6){
+							console.log("BUS STOP REACHED IN TIME");
+						}
 					} else {
-						clearInterval(test);
+						clearInterval(interval);
 					}
 				}, busSpeed); //timer speed
+			}
+
+			function avoidFirstWait(i){
+				if(i !== 0){
+					console.log("first");
+					return busSpeed;
+				}
+				else {
+					return 0;
+				}
 			}
 
 			function executeBusMoveWithAnimation(bus, intervals) {
@@ -278,9 +325,6 @@
 				}
 				return arrayPositionSteps;
 			}
-
-
-
 		</script>
 	</div>
 	</div>
