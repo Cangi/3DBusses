@@ -52,7 +52,7 @@ var locations = [
 				//[56.463175, -2.966242, 32, 99, " Bus Station"],
 				[56.414975, -2.917560, 30, 99, "Drumoig, National Golf Centre"],
 				[56.394394, -2.905977, 31, 99, "St Michaels, St Andrews Road"],
-				[56.388970, -2.890042, 32, 99, "Leuchars, Castle Farm Road End"],
+				//[56.388970, -2.890042, 32, 99, "Leuchars, Castle Farm Road End"],
 				[56.375955, -2.892332, 33, 99, "Leuchars, Railway Station"],
 				[56.361661, -2.891534, 34, 99, "Guardbridge, Innerbridge Street"],	
 				[56.339288, -2.796436, 35, 99, "St Andrews, Bus Station"],
