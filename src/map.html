@@ -253,7 +253,7 @@
 						
 						//Open schedule when a bus stop/station is clicked
 						function priceWindow(value) {
-						
+							console.log(value);
 							//var myWindow;
 							var width = 1100;
 							var height = 900;
@@ -261,8 +261,15 @@
 							var top = parseInt((screen.availHeight/2) - (height/2));
 							var windowFeatures = "width=" + width + ",height=" + height + ",status,resizable,left=" + left + ",top=" + top + ",location = no";
 							
+							if (value == 1 || value == 5 || value == 23 || value == 32 || value == 4 || value == 18 )
+							{
+							myWindow = window.open("https://nxbus.co.uk/dundee/tickets-prices", "mywindow", windowFeatures);
 							
+							}
+							else
+							{
 							myWindow = window.open("https://www.stagecoachbus.com/tickets", "mywindow", windowFeatures);
+							}
 							setTimeout(function(){
 							myWindow.document.title = 'Buy Tickets' ;
 							}, 10);//open() and title() is asynchronous						
@@ -272,7 +279,7 @@
 						//event handler for onclick event
 						function OnBusClick() {
 							if (confirm("This is Route " + x + "\nWould you like to view tickets and prices?")) {
-								priceWindow();
+								priceWindow(x);
 							} 							
 						}
 						bus.on('click', L.bind(OnBusClick, null, x));
