@@ -104,22 +104,26 @@
 				return new L.Icon(options);
 			};
 			
-			function leeArchivo(file)
+			function readFile(file)
 			{
-				var archivo = new XMLHttpRequest();
-				archivo.open("GET", file, false);
-				archivo.onreadystatechange = function ()
+				var txtFile = new XMLHttpRequest();
+				txtFile.open("GET", file, false);
+				txtFile.onreadystatechange = function ()
 				{
-					if(archivo.readyState === 4)
+					if(txtFile.readyState === 4)
 					{
-						if(archivo.status === 200 || archivo.status == 0)
+						if(txtFile.status === 200 || txtFile.status == 0)
 						{
-							var Texto = archivo.responseText;
-							myWindow.document.write (Texto);
+							var Text = txtFile.responseText;
+							myWindow.document.write (Text + "<br></br>");
+							if (file == "StopsSchedule/stations/1.txt")
+							{	
+								readFile("StopsSchedule/stations/append.txt")
+							}
 						}
 					}
 				}
-				archivo.send(null);
+				txtFile.send(null);
 			}
 			
 			
@@ -145,26 +149,35 @@
 				
 				myWindow = window.open("", "mywindow", windowFeatures);
 				myWindow.document.write('<html><head><title>Schedule</title><link rel="stylesheet" type="text/css" href="testcss.css"></head><body>');			
+
+				if (value < 1000) {
 				
-				if (value < 100) { // Distinguish better a bus stop and a bus station
-				
-					//myWindow.document.write ("Bus stop nº: " + locations[value][2] + "<br></br>");
 					var txt = locations[value][4];
 					myWindow.document.write("<center>" + txt.fontsize(6) + "</center>" + "<br></br>");
+				}
+				else {
+					value = value - 1000
+					var txt = locationBusStations[value][4];
+					myWindow.document.write("<center>" + txt.fontsize(6) + "</center>" + "<br></br>");	
+					value = value + 1000			
+				}
+				
+				if (value < 1000) { // Distinguish better a bus stop and a bus station
+				
 					myWindow.document.write ("This is the bus stop:  " + locations[value][4] + "<br></br>");
 					myWindow.document.write ("This bus stop is located on Route:  " + locations[value][3] + "<br></br>");
 					myWindow.document.write ("Buses arrive here at the following times:<br></br>");
 					var t = ("StopsSchedule/" + locations[value][2] + ".txt") //Schedule for every stop
-					leeArchivo(t);
+					readFile(t);
 				}
 				else {
 					value = value - 1000 // Get the real value again
-					var txt = locationBusStations[value][4];
-					myWindow.document.write("<center>" + txt.fontsize(6) + "</center>" + "<br></br>");
-					myWindow.document.write ("Bus Station nº: " + locationBusStations[value][2] + "<br></br>");
-					myWindow.document.write ("This is in route " + locationBusStations[value][3] + "<br></br>");				
-					var t = ("StopsSchedule/X.txt") //Schedule for every stop
-					leeArchivo(t);
+					
+					myWindow.document.write ("This is the bus station: " + locationBusStations[value][4] + "<br></br>");
+					myWindow.document.write ("Route " + locationBusStations[value][3] + " stop here. <br></br>");
+					myWindow.document.write ("Buses arrive here at the following times:<br></br>");
+					var t = ("StopsSchedule/stations/" + locationBusStations[value][2] + ".txt") //Schedule for every stop
+					readFile(t);
 				}
 				 myWindow.document.write('</body></html>');
 			}
