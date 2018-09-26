@@ -23,13 +23,12 @@ var locations = [
       			[56.459659, -2.970661, 13, 5, "Whitehall Street "],  
       			[56.455913, -2.991500, 14, 5, "West-End Perth Road - Step-Row"],  
       			[56.464413, -3.039369, 15, 5, "Ninewells Hospital - Stance B"],  
-      			//[56.464913, -3.056310, 16, 5, "Technology Park - Luna Place"],  
 				
 				//Route 23S
-				 [56.480319, -3.022696, 16, "23S", "Linton Road"],
-				 [56.471722, -3.016213, 17, "23S", "Sharps Court"],
-				 [56.464778, -3.026638, 18, "23S", "The Shand"],
-				 [56.456497, -3.009936, 19, "23S", "Harris Academy - Perth Road"],
+				[56.480319, -3.022696, 16, "23S", "Linton Road"],
+				[56.471722, -3.016213, 17, "23S", "Sharps Court"],
+				[56.464778, -3.026638, 18, "23S", "The Shand"],
+				[56.456497, -3.009936, 19, "23S", "Harris Academy - Perth Road"],
     		
 				//Route 75
 				[56.459985, -2.970808, 20, 75, "High Street"],
@@ -44,24 +43,22 @@ var locations = [
 				[56.462957, -2.999958, 26, 4, "Logie Estate - Scott Street, Ashbank Road"],
 				[56.469602, -3.000405, 27, 4, "Kilberry Street - Fullerton Street"],
 				[56.473345, -3.011184, 28, 4, "Lochee Bank Street"],
-				//[56.477685, -3.017801, 30, 4, "Park Hotel"],
 				[56.480307, -3.022678, 29, 4, "Dryburgh - Linton Road"],	
 				
 
 				//Route 99
 				//[56.463175, -2.966242, 32, 99, " Bus Station"],
-				[56.414975, -2.917560, 30, 99, "Drumoig, National Golf Centre"],
-				[56.394394, -2.905977, 31, 99, "St Michaels, St Andrews Road"],
-				//[56.388970, -2.890042, 32, 99, "Leuchars, Castle Farm Road End"],
-				[56.375955, -2.892332, 33, 99, "Leuchars, Railway Station"],
-				[56.361661, -2.891534, 34, 99, "Guardbridge, Innerbridge Street"],	
-				[56.339288, -2.796436, 35, 99, "St Andrews, Bus Station"],
+				[56.41497523133969, -2.917560762527241, 30, 99, "Drumoig, National Golf Centre"],
+				[56.39439433805446, -2.9059772397029766, 31, 99, "St Michaels, St Andrews Road"],
+				[56.37595528911013, -2.8923326878133393, 32, 99, "Leuchars, Railway Station"],
+				[56.361661875172715, -2.891534899712703, 33, 99, "Guardbridge, Innerbridge Street"],	
+				//[56.339288, -2.796436, 34, 99, "St Andrews, Bus Station"],
 				
 				//Route 18
-				[56.461747214744584, -2.9773030863589356, 36, 18, "Courthouse Square"],
-				[56.46295093995193, -2.9716814770103817, 37, 18, "Albert Square (A3)"],
-				[56.472385, -2.966119, 38, 18, "Tannadice Street"],
-				[56.488560048134396, -2.9859810653262984, 39, 18, "ASDA"]
+				[56.461747214744584, -2.9773030863589356, 34, 18, "Courthouse Square"],
+				[56.46295093995193, -2.9716814770103817, 35, 18, "Albert Square (A3)"],
+				[56.472385, -2.966119, 36, 18, "Tannadice Street"],
+				[56.488560048134396, -2.9859810653262984, 37, 18, "ASDA"]
 
 				
 				];
@@ -70,6 +67,7 @@ var locations = [
 var locationBusStations = [
       			
       			[56.463849, -2.964979, 1, "75 and 99", "City Centre Bus Station"],
+      			[56.339288, -2.796436, 2, 99, "St Andrews, Bus Station"],
     			];
 
    

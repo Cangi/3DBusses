@@ -115,7 +115,6 @@
 						if(archivo.status === 200 || archivo.status == 0)
 						{
 							var Texto = archivo.responseText;
-							//alert(Texto);
 							myWindow.document.write (Texto);
 						}
 					}
@@ -154,7 +153,6 @@
 				
 				if (value < 100) { // Distinguish better a bus stop and a bus station
 				
-					//myWindow.document.write ("Bus stop nº: " + locations[value][2] + "<br></br>");
 					myWindow.document.write ("This is route " + locations[value][3] + "<br></br>");
 					myWindow.document.write ("Bus stop name: " + locations[value][4] + "<br></br>");
 					var t = ("StopsSchedule/" + locations[value][2] + ".txt") //Schedule for every stop
@@ -165,7 +163,7 @@
 					myWindow.document.write ("Bus Station nº: " + locationBusStations[value][2] + "<br></br>");
 					myWindow.document.write ("This is in route " + locationBusStations[value][3] + "<br></br>");
 					myWindow.document.write (locationBusStations[value][4] + "<br></br>");
-					var t = ("StopsSchedule/X.txt") //Schedule for every stop
+					var t = ("StopsSchedule/stations/" + locationBusStations[value][2] + ".txt") //Schedule for every stop
 					leeArchivo(t);
 				}
 				
