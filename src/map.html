@@ -138,25 +138,24 @@
 			
 				//var myWindow;
     			var width = 400;
-    			var height = 300;
+    			var height = 500;
     			var left = parseInt((screen.availWidth/2) - (width/2));
     			var top = parseInt((screen.availHeight/2) - (height/2));
     			var windowFeatures = "width=" + width + ",height=" + height + ",status,resizable,left=" + left + ",top=" + top + ",location = no";
     			
 				
 				myWindow = window.open("", "mywindow", windowFeatures);
-				setTimeout(function(){
-				myWindow.document.title = 'Bus schdule' ;
-				}, 10);//open() and title() is asynchronous
+				myWindow.document.write('<html><head><title>Schedule</title><link rel="stylesheet" type="text/css" href="testcss.css"></head><body>');			
+				var txt = locations[value][4];
 				
-				var txt = "Schedule";
 				myWindow.document.write("<center>" + txt.fontsize(6) + "</center>" + "<br></br>");
 				
 				if (value < 100) { // Distinguish better a bus stop and a bus station
 				
 					//myWindow.document.write ("Bus stop nº: " + locations[value][2] + "<br></br>");
-					myWindow.document.write ("This is route " + locations[value][3] + "<br></br>");
-					myWindow.document.write ("Bus stop name: " + locations[value][4] + "<br></br>");
+					myWindow.document.write ("This is the bus stop:  " + locations[value][4] + "<br></br>");
+					myWindow.document.write ("This bus stop is located on Route:  " + locations[value][3] + "<br></br>");
+					myWindow.document.write ("Buses arrive here at the following times:<br></br>");
 					var t = ("StopsSchedule/" + locations[value][2] + ".txt") //Schedule for every stop
 					leeArchivo(t);
 				}
@@ -168,7 +167,7 @@
 					var t = ("StopsSchedule/X.txt") //Schedule for every stop
 					leeArchivo(t);
 				}
-				
+				 printWindow.document.write('</body></html>');
 			}
 			
 			//Add bus stops
