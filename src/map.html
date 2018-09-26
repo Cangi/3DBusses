@@ -104,22 +104,22 @@
 				return new L.Icon(options);
 			};
 			
-			function leeArchivo(file)
+			function readFile(file)
 			{
-				var archivo = new XMLHttpRequest();
-				archivo.open("GET", file, false);
-				archivo.onreadystatechange = function ()
+				var txtFile = new XMLHttpRequest();
+				txtFile.open("GET", file, false);
+				txtFile.onreadystatechange = function ()
 				{
-					if(archivo.readyState === 4)
+					if(txtFile.readyState === 4)
 					{
-						if(archivo.status === 200 || archivo.status == 0)
+						if(txtFile.status === 200 || txtFile.status == 0)
 						{
-							var Texto = archivo.responseText;
-							myWindow.document.write (Texto);
+							var Text = txtFile.responseText;
+							myWindow.document.write (Text);
 						}
 					}
 				}
-				archivo.send(null);
+				txtFile.send(null);
 			}
 			
 			
@@ -164,7 +164,7 @@
 					myWindow.document.write ("This bus stop is located on Route:  " + locations[value][3] + "<br></br>");
 					myWindow.document.write ("Buses arrive here at the following times:<br></br>");
 					var t = ("StopsSchedule/" + locations[value][2] + ".txt") //Schedule for every stop
-					leeArchivo(t);
+					readFile(t);
 				}
 				else {
 					value = value - 1000 // Get the real value again
@@ -173,7 +173,7 @@
 					myWindow.document.write ("Route " + locationBusStations[value][3] + " stop here. <br></br>");
 					myWindow.document.write ("Buses arrive here at the following times:<br></br>");
 					var t = ("StopsSchedule/stations/" + locationBusStations[value][2] + ".txt") //Schedule for every stop
-					leeArchivo(t);
+					readFile(t);
 				}
 				 myWindow.document.write('</body></html>');
 			}
