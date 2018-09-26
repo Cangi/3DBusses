@@ -115,7 +115,11 @@
 						if(txtFile.status === 200 || txtFile.status == 0)
 						{
 							var Text = txtFile.responseText;
-							myWindow.document.write (Text);
+							myWindow.document.write (Text + "<br></br>");
+							if (file == "StopsSchedule/stations/1.txt")
+							{	
+								readFile("StopsSchedule/stations/append.txt")
+							}
 						}
 					}
 				}
