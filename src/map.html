@@ -151,27 +151,25 @@
 				
 				if (value < 100) { // Distinguish better a bus stop and a bus station
 				
-<<<<<<< HEAD
-					myWindow.document.write ("This is route " + locations[value][3] + "<br></br>");
-					myWindow.document.write ("Bus stop name: " + locations[value][4] + "<br></br>");
-=======
 					//myWindow.document.write ("Bus stop nº: " + locations[value][2] + "<br></br>");
+					var txt = locations[value][4];
+					myWindow.document.write("<center>" + txt.fontsize(6) + "</center>" + "<br></br>");
 					myWindow.document.write ("This is the bus stop:  " + locations[value][4] + "<br></br>");
 					myWindow.document.write ("This bus stop is located on Route:  " + locations[value][3] + "<br></br>");
 					myWindow.document.write ("Buses arrive here at the following times:<br></br>");
->>>>>>> ce89375b2897b9ab17ada62939e21239746e840e
 					var t = ("StopsSchedule/" + locations[value][2] + ".txt") //Schedule for every stop
 					leeArchivo(t);
 				}
 				else {
 					value = value - 1000 // Get the real value again
+					var txt = locationBusStations[value][4];
+					myWindow.document.write("<center>" + txt.fontsize(6) + "</center>" + "<br></br>");
 					myWindow.document.write ("Bus Station nº: " + locationBusStations[value][2] + "<br></br>");
-					myWindow.document.write ("This is in route " + locationBusStations[value][3] + "<br></br>");
-					myWindow.document.write (locationBusStations[value][4] + "<br></br>");
-					var t = ("StopsSchedule/stations/" + locationBusStations[value][2] + ".txt") //Schedule for every stop
+					myWindow.document.write ("This is in route " + locationBusStations[value][3] + "<br></br>");				
+					var t = ("StopsSchedule/X.txt") //Schedule for every stop
 					leeArchivo(t);
 				}
-				 printWindow.document.write('</body></html>');
+				 myWindow.document.write('</body></html>');
 			}
 			
 			//Add bus stops
