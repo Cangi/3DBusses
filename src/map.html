@@ -148,8 +148,8 @@
     			
 				
 				myWindow = window.open("", "mywindow", windowFeatures);
-				myWindow.document.write('<html><head><title>Schedule</title><link rel="stylesheet" type="text/css" href="testcss.css"></head><body>');			
-
+				//myWindow.document.write('<html><head><title>Schedule</title><link rel="stylesheet" type="text/css" href="testcss.css"></head><body>');			
+				myWindow.document.write('<html><head><title>Schedule</title><ul class="nav"></ul><link rel="stylesheet" type="text/css" href="testcss.css"></head><body>');
 				if (value < 1000) {
 				
 					var txt = locations[value][4];
@@ -179,7 +179,7 @@
 					var t = ("StopsSchedule/stations/" + locationBusStations[value][2] + ".txt") //Schedule for every stop
 					readFile(t);
 				}
-				 myWindow.document.write('</body></html>');
+				myWindow.document.write('</body></html>');
 			}
 			
 			//Add bus stops
