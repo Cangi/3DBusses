@@ -145,6 +145,7 @@
 				
 				myWindow = window.open("", "mywindow", windowFeatures);
 				myWindow.document.write('<html><head><title>Schedule</title><link rel="stylesheet" type="text/css" href="testcss.css"></head><body>');			
+<<<<<<< HEAD
 				if (value < 1000) {
 				
 					var txt = locations[value][4];
@@ -159,6 +160,14 @@
 				
 				if (value < 1000) { // Distinguish better a bus stop and a bus station
 
+=======
+				
+				if (value < 100) { // Distinguish better a bus stop and a bus station
+				
+					//myWindow.document.write ("Bus stop nº: " + locations[value][2] + "<br></br>");
+					var txt = locations[value][4];
+					myWindow.document.write("<center>" + txt.fontsize(6) + "</center>" + "<br></br>");
+>>>>>>> 6c5607e67a990c372b7fbabfe482234e82adf6a9
 					myWindow.document.write ("This is the bus stop:  " + locations[value][4] + "<br></br>");
 					myWindow.document.write ("This bus stop is located on Route:  " + locations[value][3] + "<br></br>");
 					myWindow.document.write ("Buses arrive here at the following times:<br></br>");
@@ -167,13 +176,21 @@
 				}
 				else {
 					value = value - 1000 // Get the real value again
+<<<<<<< HEAD
 					myWindow.document.write ("This is the bus station: " + locationBusStations[value][4] + "<br></br>");
 					myWindow.document.write ("Route " + locationBusStations[value][3] + " stop here. <br></br>");
 					myWindow.document.write ("Buses arrive here at the following times:<br></br>");
 					var t = ("StopsSchedule/stations/" + locationBusStations[value][2] + ".txt") //Schedule for every stop
+=======
+					var txt = locationBusStations[value][4];
+					myWindow.document.write("<center>" + txt.fontsize(6) + "</center>" + "<br></br>");
+					myWindow.document.write ("Bus Station nº: " + locationBusStations[value][2] + "<br></br>");
+					myWindow.document.write ("This is in route " + locationBusStations[value][3] + "<br></br>");				
+					var t = ("StopsSchedule/X.txt") //Schedule for every stop
+>>>>>>> 6c5607e67a990c372b7fbabfe482234e82adf6a9
 					leeArchivo(t);
 				}
-				 printWindow.document.write('</body></html>');
+				 myWindow.document.write('</body></html>');
 			}
 			
 			//Add bus stops
@@ -306,7 +323,7 @@
 			var numberNinetyNineBus = getRoute(99);
 
 			//BEWARE - if routes > colors then new routes will be black
-			var colors = ['ef0b0b', 'ef670b', '1bc415', '26e2c0', '9c73dd', 'ff1c63', '291A6D', '3B552E', '922C2C', '82244D', 'B62222', '2B781F', '85B87D', 'E9E43D', 'DD832F', '9F7676', '1D2FB2', 'efd809', '00705d', '004570', '310449', 'b7005b'];
+			var colors = ['ef0b0b', 'ef670b', '1bc415', '26e2c0', '9c73dd', 'ff1c63', '291A6D', '3B552E', '922C2C', '82244D', 'B62222', '2B781F', 'E9E43D', 'DD832F', '9F7676', '1D2FB2', 'efd809', '00705d', '004570', '310449', 'b7005b'];
 			function getRandomColor() {
 				// hexadecimal starting symbol
 				var hashtag = '#';
