@@ -5,14 +5,16 @@
 	<script src="busRoutes.js"></script>
 	<script src="busStopList.js"></script>
 	<link href="https://cdn-webgl.wrld3d.com/wrldjs/addons/resources/latest/css/wrld.css" rel="stylesheet" />
-	<script src="https://code.jquery.com/jquery-3.3.1.js" integrity="sha256-2Kok7MbOyxpgUVvAk/HJ2jigOSYS2auK4Pfzbm7uH60=" crossorigin="anonymous"></script>
+	<script src="https://code.jquery.com/jquery-3.3.1.js" integrity="sha256-2Kok7MbOyxpgUVvAk/HJ2jigOSYS2auK4Pfzbm7uH60="
+	 crossorigin="anonymous"></script>
 	<script src="https://cdn-webgl.wrld3d.com/wrldjs/addons/searchbar/latest/searchbar.js"></script>
 	<link href="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.0.1/leaflet.css" rel="stylesheet" />
 	<link rel="stylesheet" href="testcss.css">
 	<script src="https://cdn-webgl.wrld3d.com/wrldjs/dist/latest/wrld.js"></script>
 	<script src="busRoutes.js"></script>
 	<script src="busStopList.js"></script>
-	<script src="https://code.jquery.com/jquery-3.3.1.js" integrity="sha256-2Kok7MbOyxpgUVvAk/HJ2jigOSYS2auK4Pfzbm7uH60=" crossorigin="anonymous"></script>
+	<script src="https://code.jquery.com/jquery-3.3.1.js" integrity="sha256-2Kok7MbOyxpgUVvAk/HJ2jigOSYS2auK4Pfzbm7uH60="
+	 crossorigin="anonymous"></script>
 	<link href="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.0.1/leaflet.css" rel="stylesheet" />
 	<link rel="stylesheet" href="testcss.css">
 </head>
@@ -342,141 +344,156 @@
 					success: function (json) {
 						//console.log(json[0].stops);
 						//console.log(json[0].route);
-						busMove(json[0].route, json[0].stops);
+						busMove(json[0].route, json[0].stops, true, 0);
 					}
 				})
 			});
 
 			//bus speed and framerate settings
-			var busSpeed = 10000; //milliseconds between each route point 
+			var busSpeed = 5000; //milliseconds between each route point 
 			var animationFrames = 60; //number of bus frames between each route point
+			var bus = L.marker([56.46135, -2.97945], { icon: myIcon }).addTo(map);
 
 			//var placeholderStop = L.marker([56.462979, -2.97141]).addTo(map);
 
 			function getSpeed(positionArray, currentBusPosition) {
-				console.log("calculating speed...");
+				console.log("calculating speed... with current bus position: " + currentBusPosition);
 				var positionStop = busStopTimes[busStopCounter][0];
 				var deadline = busStopTimes[busStopCounter][1];
-				console.log("the next bus stop is " + positionStop + " and the time to get there is " + deadline);
+				console.log("the next bus stop is " + positionStop + " and the time to get there is " + deadline + " minutes");
 				console.log("current bus position is " + positionArray[currentBusPosition]);
 				var posX = positionArray[currentBusPosition][0];
 				var posY = positionArray[currentBusPosition][1];
-				var counter = 0;
+				counter = 0;
 				while (posX !== positionStop[0] && posY !== positionStop[1]) { //positionArray[counter] !== positionStop
 					currentBusPosition++;
 					counter++;
 					posX = positionArray[currentBusPosition][0];
 					posY = positionArray[currentBusPosition][1];
 				}
-				console.log("the X and Y coordinates are " + posX + " " + posY);
 				console.log("counter is " + counter);
 				deadline = deadline * 60;
-				var timePerSection = (deadline / counter) * 1000;
+				timePerSection = (deadline / counter) * 1000;
 				console.log("the bus needs to spend " + timePerSection + " milliseconds per route section");
 				busSpeed = timePerSection;
+				busStopCounter++;
 				return positionStop;
 			}
 
-			busStopTimes = [ //placeholder
-					[
-						[56.462073,
-							-2.977424], 0
-					],
-					[
-						[56.463148,
-							-2.970305], 2
-					],
-					[
-						[56.471851,
-							-2.968487], 5
-					],
-					[
-						[56.47129,
-							-2.973604],
-					],
-					[
-						[56.472479,
-							-2.992712], null
-					],
-					[
-						[56.473129,
-							-3.005436], null
-					],
-					[
-						[56.480609,
-							-3.001139], null
-					],
-					[
-						[56.483013,
-							-3.011505], 22
-					],
-					[
-						[56.496252,
-							-3.018334], 33
-					]
+			busStopTimes = [ //placeholder 56.46274,-2.975024
+				[
+					[56.462073,
+						-2.977424], 0
+				],
+				[
+					[56.463148,
+						-2.970305], 2
+				],
+				[
+					[56.471851,
+						-2.968487], 5
+				],
+				[
+					[56.47129,
+						-2.973604], 11
+				],
+				[
+					[56.472479,
+						-2.992712], null
+				],
+				[
+					[56.473129,
+						-3.005436], null
+				],
+				[
+					[56.480609,
+						-3.001139], null
+				],
+				[
+					[56.483013,
+						-3.011505], 22
+				],
+				[
+					[56.496252,
+						-3.018334], 33
 				]
-			var busStopReached = false;
+			]
+			var busStopReached = true;
 			var upcomingBusStopPosition = [];
 			var busStopCounter = 1;
+			var interval;
+			var bigBool = false;
+			var timePerSection;
+			var counter;
 
-			function busMove(positionArray, busStops) {
-				console.log(positionArray);
+			function busMove(positionArray, busStops, isStart, startPos) {
+				if (isStart === true) {
+					console.log(positionArray);
+					console.log("calculating bus speed before the bus starts moving...");
+					upcomingBusStopPosition = getSpeed(positionArray, 0);
+					var i = 0;
+				} else {
+					i = startPos;
+				}
 				var date = new Date();
-				var currentHour = date.getHours();
-				var currentMinute = date.getMinutes();
-				var currentSecond = date.getSeconds();
-				console.log(currentHour + " " + currentMinute + " " + currentSecond);
-				var position = positionArray[0];
-				var bus = L.marker(position, { icon: myIcon }).addTo(map);
-				var i = 0;
-				console.log("starting...");
-				var interval = setInterval(() => {
+				console.log("external time ref: " + date.getHours() + " " + date.getMinutes() + " " + date.getSeconds());
+				interval = setInterval(() => {
+					if(bigBool === false) {
+						console.log("doing recalculation of speed");
+						bigBool = true;
+						var difference = busSpeed / counter;
+						busSpeed -= difference;
+						clearInterval(interval);
+						busMove(positionArray, busStops, false, i+1);
+					}
 					i++;
 					if (i < positionArray.length) {
-						console.log("starting from " + positionArray[i-1]);
-						var intervals = calculateBusAnimationPosition(positionArray[i-1], positionArray[i]);
-						if (busStopReached === false) { //TODO CAUSING BUS TO SKIP AROUND WEIRDLY
+						console.log(i);
+						console.log(busSpeed);
+						console.log("starting from " + positionArray[i - 1]);
+						var intervals = calculateBusAnimationPosition(positionArray[i - 1], positionArray[i]);
+						executeBusMoveWithAnimation(bus, intervals, busSpeed, positionArray, i, busStops);
+						/*if (busStopReached === false && i !== 1) {
 							console.log("trying to calculate bus stop stuff");
-							upcomingBusStopPosition = getSpeed(positionArray, i-1);
-							busStopCounter++;
+							upcomingBusStopPosition = getSpeed(positionArray, i);
+							console.log("bus stop is " + upcomingBusStopPosition);
 							busStopReached = true;
-						}
-						executeBusMoveWithAnimation(bus, intervals);
-						var newDate = new Date();
-						console.log(newDate.getHours() + " " + newDate.getMinutes() + " " + newDate.getSeconds());
-						console.log("speed is " + busSpeed);
-						//console.log("comparing " + bus.getLatLng() + " to " + upcomingBusStopPosition);
-						/*if(upcomingBusStopPosition === bus.getLatLng()){
-							busStopReached = false;
-							console.log("BUS STOP REACHED");
 						}*/
+						var newDate = new Date();
+						console.log("time in loop is " + newDate.getHours() + " " + newDate.getMinutes() + " " + newDate.getSeconds());
 					} else {
 						clearInterval(interval);
 					}
 				}, busSpeed); //timer speed
 			}
 
-			/*function avoidFirstWait(i) {
-				if (i !== 0) {
-					console.log("first");
-					return busSpeed;
-				}
-				else {
-					return 0;
-				}
-			}*/
-
-			function executeBusMoveWithAnimation(bus, intervals) {
+			function executeBusMoveWithAnimation(bus, intervals, routeSectionSpeed, positionArray, i, busStops) {
 				var j = 0;
 				var refreshId = setInterval(() => {
 					j++;
 					if (j < intervals.length) {
+						console.log("speed is " + busSpeed + " and j is " + j);
 						bus.setLatLng(intervals[j]).update();
+						var posX = intervals[j][0];
+						var posY = intervals[j][1];
+						//console.log(posX + " and " + posY);
+						if (posX === upcomingBusStopPosition[0] && posY === upcomingBusStopPosition[1]) {
+							//busStopReached = false;
+							var date = new Date();
+							console.log("BUS STOP REACHED AT " + date.getHours() + " " + date.getMinutes() + " " + date.getSeconds());
+							console.log("trying to calculate bus stop stuff");
+							upcomingBusStopPosition = getSpeed(positionArray, i);
+							console.log("bus stop is " + upcomingBusStopPosition);
+							bigBool = false;
+							//busStopReached = true;
+							clearInterval(interval);
+							busMove(positionArray, busStops, false, i)
+						}
 					}
 					else {
 						clearInterval(refreshId);
 					}
-				}, busSpeed / animationFrames); //timer speed
+				}, routeSectionSpeed / animationFrames);
 			}
 
 			function calculateBusAnimationPosition(positionOld, positionNew) {
@@ -484,25 +501,6 @@
 				var yDistance = positionNew[1] - positionOld[1];
 				var xStep = xDistance / animationFrames;
 				var yStep = yDistance / animationFrames;
-				//console.log("x distance: " + xDistance + " y distance: " + yDistance);
-				//var animationFramesTemp = animationFrames;
-				//biggest ones
-				/*if(xDistance < -0.002 || xDistance > 0.002 || yDistance < -0.002 || yDistance > 0.002){
-					var bus = L.marker(positionNew).addTo(map);
-					//animationFramesTemp += 10; //CAUSING FRAME SKIPS, SOMETHING IS WRONG, MORE NEEDS TO BE CHANGED
-					var xStep = xDistance / animationFramesTemp;
-					var yStep = yDistance / animationFramesTemp;
-				//normal size
-				} else if(xDistance < -0.0005 || xDistance > 0.0005 || yDistance < -0.0005 || yDistance > 0.0005) {
-					animationFramesTemp = animationFramesTemp + 20;
-					var xStep = xDistance / animationFramesTemp;
-					var yStep = yDistance / animationFramesTemp;
-				//smallest ones
-				} else {
-					//var bus = L.marker(positionNew, {opacity: 0.5}).addTo(map);
-					var xStep = xDistance / animationFramesTemp;
-					var yStep = yDistance / animationFramesTemp;
-				}*/
 				var arrayPositionSteps = [];
 				var positionOldCopy = positionOld;
 				for (var i = 0; i < animationFrames + 1; i++) {
