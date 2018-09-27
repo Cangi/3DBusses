@@ -60,10 +60,16 @@
 					});
 				}, 20000);
 
-				var locationIcon = L.icon({
+				var personIcon = L.icon({
 					iconUrl: 'https://static.thenounproject.com/png/12314-200.png',
-					iconSize: [60, 50], // size of the icon
-					popupAnchor: [0, -15],
+					iconSize: [40,50], // size of the icon
+					popupAnchor: [0,-15],
+				});
+				
+				var locationIcon = L.icon({
+					iconUrl: 'https://data.whicdn.com/images/140408838/large.png',
+					iconSize: [300,300], // size of the icon
+					popupAnchor: [0,-15],
 				});
 
 				var customPopup = "You Are Here.";
@@ -75,8 +81,9 @@
 					'className': 'custom'
 				}
 
-				var marker = L.marker([position.coords.latitude, position.coords.longitude], { icon: locationIcon }).bindPopup(customPopup, customOptions).addTo(map);
-				console.log("Latitude: " + position.coords.latitude + "<br>Longitude: " + position.coords.longitude);
+				var marker = L.marker([position.coords.latitude, position.coords.longitude], {icon: personIcon}).addTo(map);
+				var marker = L.marker([position.coords.latitude, position.coords.longitude], {icon: locationIcon}).bindPopup(customPopup,customOptions).addTo(map);
+				//console.log("Latitude: " + position.coords.latitude + "<br>Longitude: " + position.coords.longitude);
 			}
 
 			// create custom icon
