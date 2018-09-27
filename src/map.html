@@ -110,7 +110,7 @@
 						}
 					}
 				}
-				archivo.send(null);
+				txtFile.send(null);
 			}
 
 
@@ -148,7 +148,7 @@
 					myWindow.document.write("This is route " + locations[value][3] + "<br></br>");
 					myWindow.document.write("Bus stop name: " + locations[value][4] + "<br></br>");
 					var t = ("StopsSchedule/" + locations[value][2] + ".txt") //Schedule for every stop
-					leeArchivo(t);
+					readFile(t);
 				}
 				else {
 					value = value - 1000 // Get the real value again
@@ -240,9 +240,37 @@
 						var bus = L.polyline(routes[x], { color: getRandomColor(), className: 'BusOptions' });
 						//add this route to the route group
 						routeFeatureGroup.addLayer(bus);
+						
+						//Open schedule when a bus stop/station is clicked
+						function priceWindow(value) {
+							console.log(value);
+							//var myWindow;
+							var width = 1100;
+							var height = 900;
+							var left = parseInt((screen.availWidth/2) - (width/2));
+							var top = parseInt((screen.availHeight/2) - (height/2));
+							var windowFeatures = "width=" + width + ",height=" + height + ",status,resizable,left=" + left + ",top=" + top + ",location = no";
+							
+							if (value == 1 || value == 5 || value == 23 || value == 32 || value == 4 || value == 18 )
+							{
+							myWindow = window.open("https://nxbus.co.uk/dundee/tickets-prices", "mywindow", windowFeatures);
+							
+							}
+							else
+							{
+							myWindow = window.open("https://www.stagecoachbus.com/tickets", "mywindow", windowFeatures);
+							}
+							setTimeout(function(){
+							myWindow.document.title = 'Buy Tickets' ;
+							}, 10);//open() and title() is asynchronous						
+						}
+						
+						
 						//event handler for onclick event
 						function OnBusClick() {
-							alert("This is route : " + x);
+							if (confirm("This is Route " + x + "\nWould you like to view tickets and prices?")) {
+								priceWindow(x);
+							} 							
 						}
 						bus.on('click', L.bind(OnBusClick, null, x));
 
@@ -266,7 +294,7 @@
 			var numberNinetyNineBus = getRoute(99);
 
 			//BEWARE - if routes > colors then new routes will be black
-			var colors = ['ef0b0b', 'ef670b', '1bc415', '26e2c0', '9c73dd', 'ff1c63', '291A6D', '3B552E', '922C2C', '82244D', 'B62222', '2B781F', '85B87D', 'E9E43D', 'DD832F', '9F7676', '1D2FB2', 'efd809', '00705d', '004570', '310449', 'b7005b'];
+			var colors = ['ef0b0b', 'ef670b', '1bc415', '26e2c0', '9c73dd', 'ff1c63', '291A6D', '3B552E', '922C2C', '82244D', 'B62222', '2B781F', 'E9E43D', 'DD832F', '9F7676', '1D2FB2', 'efd809', '00705d', '004570', '310449', 'b7005b'];
 			function getRandomColor() {
 				// hexadecimal starting symbol
 				var hashtag = '#';
@@ -344,14 +372,20 @@
 					success: function (json) {
 						//console.log(json[0].stops);
 						//console.log(json[0].route);
-						busMove(json[0].route, json[0].stops, true, 0);
+						jsonInterpreter(json[0].route, json[0].stops);
 					}
 				})
 			});
 
+			function jsonInterpreter(routeArray, stopsArray) {
+				console.log(routeArray);
+				console.log(stopsArray);
+				busMove(routeArray, busStopTimes, true, 0);
+			}
+
 			//bus speed and framerate settings
 			var busSpeed = 5000; //milliseconds between each route point 
-			var animationFrames = 60; //number of bus frames between each route point
+			var animationFrames = 80; //number of bus frames between each route point
 			var bus = L.marker([56.46135, -2.97945], { icon: myIcon }).addTo(map);
 
 			//var placeholderStop = L.marker([56.462979, -2.97141]).addTo(map);
@@ -380,7 +414,7 @@
 				return positionStop;
 			}
 
-			busStopTimes = [ //placeholder 56.46274,-2.975024
+			busStopTimes = [ 
 				[
 					[56.462073,
 						-2.977424], 0
@@ -391,60 +425,60 @@
 				],
 				[
 					[56.471851,
-						-2.968487], 5
+						-2.968487], 4
 				],
 				[
 					[56.47129,
-						-2.973604], 11
+						-2.973604], 1
 				],
 				[
 					[56.472479,
-						-2.992712], null
+						-2.992712], 6
 				],
 				[
 					[56.473129,
-						-3.005436], null
+						-3.005436], 4
 				],
 				[
 					[56.480609,
-						-3.001139], null
+						-3.001139], 3
 				],
 				[
 					[56.483013,
-						-3.011505], 22
+						-3.011505], 5
 				],
 				[
 					[56.496252,
-						-3.018334], 33
+						-3.018334], 6
 				]
 			]
-			var busStopReached = true;
 			var upcomingBusStopPosition = [];
 			var busStopCounter = 1;
 			var interval;
-			var bigBool = false;
+			var isNormalLoop = false;
 			var timePerSection;
 			var counter;
+			var date = new Date();
 
-			function busMove(positionArray, busStops, isStart, startPos) {
-				if (isStart === true) {
-					console.log(positionArray);
+			function busMove(positionArray, busStopTimes, isStart, startPos) {
+				if(isStart === true) {
+					//console.log(positionArray);
 					console.log("calculating bus speed before the bus starts moving...");
 					upcomingBusStopPosition = getSpeed(positionArray, 0);
 					var i = 0;
+					bus.setLatLng(positionArray[0]).update();
 				} else {
 					i = startPos;
 				}
-				var date = new Date();
 				console.log("external time ref: " + date.getHours() + " " + date.getMinutes() + " " + date.getSeconds());
 				interval = setInterval(() => {
-					if(bigBool === false) {
+					if(isNormalLoop === false) {
 						console.log("doing recalculation of speed");
-						bigBool = true;
+						isNormalLoop = true;
 						var difference = busSpeed / counter;
 						busSpeed -= difference;
 						clearInterval(interval);
-						busMove(positionArray, busStops, false, i+1);
+						busMove(positionArray, busStopTimes, false, i+1);
 					}
 					i++;
 					if (i < positionArray.length) {
@@ -452,22 +486,15 @@
 						console.log(busSpeed);
 						console.log("starting from " + positionArray[i - 1]);
 						var intervals = calculateBusAnimationPosition(positionArray[i - 1], positionArray[i]);
-						executeBusMoveWithAnimation(bus, intervals, busSpeed, positionArray, i, busStops);
-						/*if (busStopReached === false && i !== 1) {
-							console.log("trying to calculate bus stop stuff");
-							upcomingBusStopPosition = getSpeed(positionArray, i);
-							console.log("bus stop is " + upcomingBusStopPosition);
-							busStopReached = true;
-						}*/
-						var newDate = new Date();
-						console.log("time in loop is " + newDate.getHours() + " " + newDate.getMinutes() + " " + newDate.getSeconds());
+						executeBusMoveWithAnimation(bus, intervals, busSpeed, positionArray, i, busStopTimes);
+						console.log("time in loop is " + date.getHours() + " " + date.getMinutes() + " " + date.getSeconds());
 					} else {
 						clearInterval(interval);
 					}
 				}, busSpeed); //timer speed
 			}
 
-			function executeBusMoveWithAnimation(bus, intervals, routeSectionSpeed, positionArray, i, busStops) {
+			function executeBusMoveWithAnimation(bus, intervals, routeSectionSpeed, positionArray, i, busStopTimes) {
 				var j = 0;
 				var refreshId = setInterval(() => {
 					j++;
@@ -476,18 +503,15 @@
 						bus.setLatLng(intervals[j]).update();
 						var posX = intervals[j][0];
 						var posY = intervals[j][1];
-						//console.log(posX + " and " + posY);
 						if (posX === upcomingBusStopPosition[0] && posY === upcomingBusStopPosition[1]) {
-							//busStopReached = false;
 							var date = new Date();
 							console.log("BUS STOP REACHED AT " + date.getHours() + " " + date.getMinutes() + " " + date.getSeconds());
 							console.log("trying to calculate bus stop stuff");
 							upcomingBusStopPosition = getSpeed(positionArray, i);
 							console.log("bus stop is " + upcomingBusStopPosition);
-							bigBool = false;
-							//busStopReached = true;
+							isNormalLoop = false;
 							clearInterval(interval);
-							busMove(positionArray, busStops, false, i)
+							busMove(positionArray, busStopTimes, false, i)
 						}
 					}
 					else {
