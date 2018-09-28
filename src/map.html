@@ -493,8 +493,8 @@
 			var isNormalLoop = false;
 			var timePerSection;
 			var counter;
-			var bus1;
-			var bus18;
+			var bus1 = L.marker([0,0], { icon: myIcon, title:"Bus 1" }).addTo(map);;
+			var bus18 = L.marker([0,0], { icon: myIcon, title:"Bus 18" }).addTo(map);;
 
 			function busMove(positionArray, busStopTimes, isStart, startPos, busNumber) {
 				var bus;
@@ -509,7 +509,7 @@
 				//console.log(test);
 				if (isStart) {
 					//console.log(positionArray);
-					window[bus] = L.marker(positionArray[0], { icon: myIcon }).addTo(map);
+					window[bus].setLatLng(positionArray[0]).update();
 					//var test = busArray[busArrayPosition];
 					console.log(bus + ": calculating bus speed before the bus starts moving...");
 					upcomingBusStopPosition = getSpeed(positionArray, 0, busStopTimes);
