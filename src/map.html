@@ -127,10 +127,7 @@
 			var stationsArray = []
 			var myWindow;
 
-			let busses = [
-				//Remove when Dwayne is ready
-				{ title: "Test", location: { latLng: L.latLng(56.458522, -2.97107), zoom: 17, headingDegrees: 235 } },
-			];
+			
 
 			//Open schedule when a bus stop/station is clicked
 			function newWindow(value) {
@@ -325,44 +322,7 @@
 				return color;
 			}
 
-			var locationSearchService = {
-				fetchNearbyLocationsByTerm: function (latLng, term, callback) {
-					term = term.trim().toLowerCase();
-					var results = [];
-					if (term.length > 0) {
-						busses.forEach(function (location) {
-							var termPos = location.title.toLowerCase().indexOf(term);
-							if (termPos !== -1) {
-								results.push(Object.assign({}, location, { distSqr: calculateDistSqr(latLng, location.location.latLng) }));
-							}
-						});
-					}
-					results.sort(function (lhs, rhs) { return lhs.distSqr - rhs.distSqr; });
-					callback(results);
-				},
-
-				fetchAutocompleteOptions: function (latLng, term, callback) {
-					term = term.trim().toLowerCase();
-					var options = [];
-					if (term.length > 0) {
-						busses.forEach(function (location) {
-							var termPos = location.title.toLowerCase().indexOf(term);
-							if (termPos !== -1) {
-								options.push(Object.assign({}, location, { pos: termPos }));
-							}
-						});
-					}
-					options.sort(function (lhs, rhs) { return lhs.pos - rhs.pos; });
-					callback(options);
-				}
-			}
-
-			var searchbarConfig = {
-				locationSearchService: locationSearchService
-			};
-			var searchbar = new WrldSearchbar("widget-container", map, searchbarConfig);
-
-
+			
 			//placeholder bus trigger marker
 			//var trigger = L.marker([56.46135, -2.97943], { title: "first" }).addTo(map);
 
@@ -442,14 +402,14 @@
 						busMove(json[0].route, busStopTimes1, true, 0, 1);
 					}
 				})
-				/*$.get({
+				$.get({
 					url: "/getBusStops",
 					data: { busNumber: '18' },
 					success: function (json) {
 						//jsonInterpreter(json[0].route, json[0].stops, busStopTimes18, "bus2");
 						busMove(json[0].route, busStopTimes18, true, 0, 18);
 					}
-				})*/
+				})
 			});
 
 			function jsonInterpreter(routeArray, stopsArray, busStopTimes, busName) {
@@ -497,7 +457,11 @@
 			var bus18 = L.marker([56.461747214744584, -2.9773030863589356], { icon: myIcon, title:"Bus 18" }).addTo(map);
 			//var bus1;
 			//var bus18;
-
+			let busses = [
+				//Remove when Dwayne is ready
+				{ title: "Bus 1", location: { latLng: bus1.getLatLng(), zoom: 17, headingDegrees: 235 } },
+				{ title: "Bus 18", location: { latLng: bus18.getLatLng(), zoom: 17, headingDegrees: 235 } }
+			];
 			function busMove(positionArray, busStopTimes, isStart, startPos, busNumber) {
 				var bus;
 				switch (busNumber) {
@@ -569,6 +533,11 @@
 						//console.log(intervals[j]);
 						//console.log(bus);
 						window[bus].setLatLng(intervals[j]).update();
+						if(bus === "bus1"){
+							busses[0]['location']['latLng'] = window[bus]['_latlng'];
+						}else{
+							busses[1]['location']['latLng'] = window[bus]['_latlng'];
+						} 
 						var posX = intervals[j][0];
 						var posY = intervals[j][1];
 						//console.log("comparing " + posX + " " + posY + " with " + upcomingBusStopPosition);
@@ -610,6 +579,49 @@
 				}
 				return arrayPositionSteps;
 			}
+			
+			var calculateDistSqr = function(latLng1, latLng2) {
+        return Math.pow(latLng1.lat - latLng2.lat, 2) + Math.pow(latLng1.lng - latLng2.lng, 2);
+      };
+
+			var locationSearchService = {
+				fetchNearbyLocationsByTerm: function (latLng, term, callback) {
+					term = term.trim().toLowerCase();
+					var results = [];
+					if (term.length > 0) {
+						busses.forEach(function (location) {
+							var termPos = location.title.toLowerCase().indexOf(term);
+							if (termPos !== -1) {
+								results.push(Object.assign({}, location, { distSqr: calculateDistSqr(latLng, location.location.latLng) }));
+							}
+						});
+					}
+					results.sort(function (lhs, rhs) { return lhs.distSqr - rhs.distSqr; });
+					callback(results);
+				},
+
+				fetchAutocompleteOptions: function (latLng, term, callback) {
+					term = term.trim().toLowerCase();
+					var options = [];
+					if (term.length > 0) {
+						busses.forEach(function (location) {
+							var termPos = location.title.toLowerCase().indexOf(term);
+							if (termPos !== -1) {
+								options.push(Object.assign({}, location, { pos: termPos }));
+							}
+						});
+					}
+					options.sort(function (lhs, rhs) { return lhs.pos - rhs.pos; });
+					callback(options);
+				}
+			}
+
+			var searchbarConfig = {
+				locationSearchService: locationSearchService
+			};
+			var searchbar = new WrldSearchbar("widget-container", map, searchbarConfig);
+
+
 		</script>
 	</div>
 
